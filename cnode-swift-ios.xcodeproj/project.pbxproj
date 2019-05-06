@@ -10,9 +10,19 @@
 		462E2A2D22753582002A1FE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E2A2C22753582002A1FE7 /* AppDelegate.swift */; };
 		462E2A3722753583002A1FE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 462E2A3522753583002A1FE7 /* LaunchScreen.storyboard */; };
 		462E2A402275392F002A1FE7 /* CNDashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E2A3F2275392F002A1FE7 /* CNDashboardViewController.swift */; };
-		462E2A4222753ADB002A1FE7 /* PersonCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E2A4122753ADB002A1FE7 /* PersonCenterViewController.swift */; };
+		462E2A4222753ADB002A1FE7 /* CNPersonCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E2A4122753ADB002A1FE7 /* CNPersonCenterViewController.swift */; };
 		462E2A4422753AEB002A1FE7 /* CNHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E2A4322753AEB002A1FE7 /* CNHomeViewController.swift */; };
 		462E2A4622754206002A1FE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 462E2A4522754206002A1FE7 /* Assets.xcassets */; };
+		464FB387227ED27E007C438A /* CNLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB386227ED27E007C438A /* CNLoginViewController.swift */; };
+		464FB38A227EDD02007C438A /* CNUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB389227EDD02007C438A /* CNUserService.swift */; };
+		464FB38D227F0076007C438A /* CNLoginQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB38C227F0076007C438A /* CNLoginQRCode.swift */; };
+		464FB390227FCC95007C438A /* CNReplies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB38F227FCC95007C438A /* CNReplies.swift */; };
+		464FB393227FCD32007C438A /* CNCollectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB392227FCD32007C438A /* CNCollectionList.swift */; };
+		464FB396227FD16F007C438A /* CNCreatedTopics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB395227FD16F007C438A /* CNCreatedTopics.swift */; };
+		464FB39A227FDD76007C438A /* CNCreatedTopicsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB399227FDD75007C438A /* CNCreatedTopicsCell.swift */; };
+		464FB39C227FEFE3007C438A /* CNRepliesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB39B227FEFE3007C438A /* CNRepliesCell.swift */; };
+		464FB39E227FF3BA007C438A /* CNCollectionListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB39D227FF3BA007C438A /* CNCollectionListCell.swift */; };
+		464FB3A1227FF90D007C438A /* CNSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3A0227FF90D007C438A /* CNSetting.swift */; };
 		469E38922275733E00840E3A /* CNHomeCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E38912275733E00840E3A /* CNHomeCollectionCell.swift */; };
 		469E389622759B4600840E3A /* CNHomeContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E389522759B4600840E3A /* CNHomeContentViewController.swift */; };
 		469E38982275CE6800840E3A /* CNHomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E38972275CE6800840E3A /* CNHomeTableViewCell.swift */; };
@@ -29,9 +39,19 @@
 		462E2A3622753583002A1FE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		462E2A3822753583002A1FE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		462E2A3F2275392F002A1FE7 /* CNDashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDashboardViewController.swift; sourceTree = "<group>"; };
-		462E2A4122753ADB002A1FE7 /* PersonCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCenterViewController.swift; sourceTree = "<group>"; };
+		462E2A4122753ADB002A1FE7 /* CNPersonCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPersonCenterViewController.swift; sourceTree = "<group>"; };
 		462E2A4322753AEB002A1FE7 /* CNHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeViewController.swift; sourceTree = "<group>"; };
 		462E2A4522754206002A1FE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		464FB386227ED27E007C438A /* CNLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNLoginViewController.swift; sourceTree = "<group>"; };
+		464FB389227EDD02007C438A /* CNUserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNUserService.swift; sourceTree = "<group>"; };
+		464FB38C227F0076007C438A /* CNLoginQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNLoginQRCode.swift; sourceTree = "<group>"; };
+		464FB38F227FCC95007C438A /* CNReplies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNReplies.swift; sourceTree = "<group>"; };
+		464FB392227FCD32007C438A /* CNCollectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollectionList.swift; sourceTree = "<group>"; };
+		464FB395227FD16F007C438A /* CNCreatedTopics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCreatedTopics.swift; sourceTree = "<group>"; };
+		464FB399227FDD75007C438A /* CNCreatedTopicsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCreatedTopicsCell.swift; sourceTree = "<group>"; };
+		464FB39B227FEFE3007C438A /* CNRepliesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRepliesCell.swift; sourceTree = "<group>"; };
+		464FB39D227FF3BA007C438A /* CNCollectionListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollectionListCell.swift; sourceTree = "<group>"; };
+		464FB3A0227FF90D007C438A /* CNSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSetting.swift; sourceTree = "<group>"; };
 		469E38912275733E00840E3A /* CNHomeCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeCollectionCell.swift; sourceTree = "<group>"; };
 		469E389522759B4600840E3A /* CNHomeContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeContentViewController.swift; sourceTree = "<group>"; };
 		469E38972275CE6800840E3A /* CNHomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeTableViewCell.swift; sourceTree = "<group>"; };
@@ -77,6 +97,7 @@
 		462E2A2B22753582002A1FE7 /* cnode-swift-ios */ = {
 			isa = PBXGroup;
 			children = (
+				464FB388227EDCE1007C438A /* Service */,
 				462E2A3E227538EC002A1FE7 /* Controllers */,
 				462E2A2C22753582002A1FE7 /* AppDelegate.swift */,
 				462E2A3522753583002A1FE7 /* LaunchScreen.storyboard */,
@@ -89,12 +110,77 @@
 		462E2A3E227538EC002A1FE7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				464FB39F227FF8F6007C438A /* Setting */,
+				464FB394227FD142007C438A /* CreatedTopics */,
+				464FB391227FCD20007C438A /* CollectionList */,
+				464FB38E227FCC69007C438A /* Replies */,
+				464FB38B227EFFDB007C438A /* LoginQRScan */,
+				464FB385227ED262007C438A /* Login */,
 				469E3899227683F600840E3A /* Topic */,
 				469E38942275798E00840E3A /* PersonCenter */,
 				469E38902275730300840E3A /* Home */,
 				469E38932275795400840E3A /* Dashboard */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		464FB385227ED262007C438A /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				464FB386227ED27E007C438A /* CNLoginViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		464FB388227EDCE1007C438A /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				464FB389227EDD02007C438A /* CNUserService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		464FB38B227EFFDB007C438A /* LoginQRScan */ = {
+			isa = PBXGroup;
+			children = (
+				464FB38C227F0076007C438A /* CNLoginQRCode.swift */,
+			);
+			path = LoginQRScan;
+			sourceTree = "<group>";
+		};
+		464FB38E227FCC69007C438A /* Replies */ = {
+			isa = PBXGroup;
+			children = (
+				464FB38F227FCC95007C438A /* CNReplies.swift */,
+				464FB39B227FEFE3007C438A /* CNRepliesCell.swift */,
+			);
+			path = Replies;
+			sourceTree = "<group>";
+		};
+		464FB391227FCD20007C438A /* CollectionList */ = {
+			isa = PBXGroup;
+			children = (
+				464FB392227FCD32007C438A /* CNCollectionList.swift */,
+				464FB39D227FF3BA007C438A /* CNCollectionListCell.swift */,
+			);
+			path = CollectionList;
+			sourceTree = "<group>";
+		};
+		464FB394227FD142007C438A /* CreatedTopics */ = {
+			isa = PBXGroup;
+			children = (
+				464FB395227FD16F007C438A /* CNCreatedTopics.swift */,
+				464FB399227FDD75007C438A /* CNCreatedTopicsCell.swift */,
+			);
+			path = CreatedTopics;
+			sourceTree = "<group>";
+		};
+		464FB39F227FF8F6007C438A /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				464FB3A0227FF90D007C438A /* CNSetting.swift */,
+			);
+			path = Setting;
 			sourceTree = "<group>";
 		};
 		469E38902275730300840E3A /* Home */ = {
@@ -119,7 +205,7 @@
 		469E38942275798E00840E3A /* PersonCenter */ = {
 			isa = PBXGroup;
 			children = (
-				462E2A4122753ADB002A1FE7 /* PersonCenterViewController.swift */,
+				462E2A4122753ADB002A1FE7 /* CNPersonCenterViewController.swift */,
 			);
 			path = PersonCenter;
 			sourceTree = "<group>";
@@ -279,12 +365,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				462E2A4222753ADB002A1FE7 /* PersonCenterViewController.swift in Sources */,
+				464FB39C227FEFE3007C438A /* CNRepliesCell.swift in Sources */,
+				464FB387227ED27E007C438A /* CNLoginViewController.swift in Sources */,
+				464FB396227FD16F007C438A /* CNCreatedTopics.swift in Sources */,
+				462E2A4222753ADB002A1FE7 /* CNPersonCenterViewController.swift in Sources */,
+				464FB39A227FDD76007C438A /* CNCreatedTopicsCell.swift in Sources */,
 				469E38922275733E00840E3A /* CNHomeCollectionCell.swift in Sources */,
+				464FB39E227FF3BA007C438A /* CNCollectionListCell.swift in Sources */,
 				469E389B2276842000840E3A /* CNTopicViewController.swift in Sources */,
 				469E389622759B4600840E3A /* CNHomeContentViewController.swift in Sources */,
 				469E389F2276BF3200840E3A /* CNTopicContentCell.swift in Sources */,
+				464FB38D227F0076007C438A /* CNLoginQRCode.swift in Sources */,
+				464FB38A227EDD02007C438A /* CNUserService.swift in Sources */,
+				464FB390227FCC95007C438A /* CNReplies.swift in Sources */,
 				462E2A4422753AEB002A1FE7 /* CNHomeViewController.swift in Sources */,
+				464FB393227FCD32007C438A /* CNCollectionList.swift in Sources */,
+				464FB3A1227FF90D007C438A /* CNSetting.swift in Sources */,
 				469E38982275CE6800840E3A /* CNHomeTableViewCell.swift in Sources */,
 				469E38A12276CC5C00840E3A /* CNTopicContentWebViewCell.swift in Sources */,
 				462E2A402275392F002A1FE7 /* CNDashboardViewController.swift in Sources */,

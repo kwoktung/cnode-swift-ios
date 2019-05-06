@@ -1,14 +1,14 @@
 //
-//  CNHomeTableViewCell.swift
+//  CNCollectionListCell.swift
 //  cnode-swift-ios
 //
-//  Created by guodong on 2019/4/28.
+//  Created by guodong on 2019/5/6.
 //  Copyright © 2019 kwoktung. All rights reserved.
 //
 
 import UIKit
 
-class  CNHomeTableViewCellPaddingLabel: UILabel {
+class CNCollectionListCellPaddingLabel: UILabel {
     override func drawText(in rect: CGRect) {
         return super.drawText(in: rect.inset(by: .init(top: 0, left: 10, bottom: 0, right: 10)));
     }
@@ -18,16 +18,16 @@ class  CNHomeTableViewCellPaddingLabel: UILabel {
     }
 }
 
-class CNHomeTableViewCell: UITableViewCell {
+class CNCollectionListCell: UITableViewCell {
     let title = UILabel();
     let avator = UIImageView();
     let visitCount = UILabel();
     let lastAnswer = UILabel();
-    let replyCount = CNHomeTableViewCellPaddingLabel();
-
+    let replyCount = CNCollectionListCellPaddingLabel();
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier);
-        title.numberOfLines = 2;
+        title.numberOfLines = 3;
         self.addSubview(avator);
         avator.snp.makeConstraints { (make) in
             make.top.equalTo(10);
@@ -58,7 +58,7 @@ class CNHomeTableViewCell: UITableViewCell {
             make.left.equalTo(textView);
             make.centerY.equalTo(textView);
         }
-
+        
         textView.addSubview(lastAnswer);
         lastAnswer.font = UIFont(name: "PingFang-SC-Regular", size: 12);
         lastAnswer.textColor = UIColor(red: 50/255, green: 50/255, blue: 50/255, alpha: 1);
@@ -83,3 +83,4 @@ class CNHomeTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

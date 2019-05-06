@@ -16,14 +16,14 @@ import WebKit
 class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, WKNavigationDelegate {
     let tableView = UITableView();
     var topic: JSON!;
-    var replyArr:JSON!;
+    var replyArr:[JSON] = [];
     var webHeight: CGFloat = UITableView.automaticDimension;
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return replyArr == nil || replyArr.count == 0 ? 1 : 2
+        return replyArr.count == 0 ? 1 : 2
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2 : replyArr == nil ? 0: replyArr.count;
+        return section == 0 ? 2 : replyArr.count;
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -115,7 +115,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
                 parameters: ["mdrender": "false"
                 ]).responseJSON {(response) in
                     let json = JSON(response.result.value!);
-                    self.replyArr = json["data"]["replies"];
+                    self.replyArr = json["data"]["replies"].arrayValue;
                     self.tableView.reloadData();
             }
         }
@@ -139,6 +139,8 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
         }
-        self.loadData(topicId: topic["id"].string!);
+        if(self.replyArr.count == 0) {
+            self.loadData(topicId: topic["id"].stringValue);
+        }
     }
 }
