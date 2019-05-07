@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		462E2A2D22753582002A1FE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E2A2C22753582002A1FE7 /* AppDelegate.swift */; };
-		462E2A3722753583002A1FE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 462E2A3522753583002A1FE7 /* LaunchScreen.storyboard */; };
 		462E2A402275392F002A1FE7 /* CNDashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E2A3F2275392F002A1FE7 /* CNDashboardViewController.swift */; };
 		462E2A4222753ADB002A1FE7 /* CNPersonCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E2A4122753ADB002A1FE7 /* CNPersonCenterViewController.swift */; };
 		462E2A4422753AEB002A1FE7 /* CNHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E2A4322753AEB002A1FE7 /* CNHomeViewController.swift */; };
@@ -23,6 +22,7 @@
 		464FB39C227FEFE3007C438A /* CNRepliesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB39B227FEFE3007C438A /* CNRepliesCell.swift */; };
 		464FB39E227FF3BA007C438A /* CNCollectionListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB39D227FF3BA007C438A /* CNCollectionListCell.swift */; };
 		464FB3A1227FF90D007C438A /* CNSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3A0227FF90D007C438A /* CNSetting.swift */; };
+		464FB3A522803373007C438A /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 464FB3A42280335F007C438A /* iconfont.ttf */; };
 		469E38922275733E00840E3A /* CNHomeCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E38912275733E00840E3A /* CNHomeCollectionCell.swift */; };
 		469E389622759B4600840E3A /* CNHomeContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E389522759B4600840E3A /* CNHomeContentViewController.swift */; };
 		469E38982275CE6800840E3A /* CNHomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E38972275CE6800840E3A /* CNHomeTableViewCell.swift */; };
@@ -52,6 +52,7 @@
 		464FB39B227FEFE3007C438A /* CNRepliesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRepliesCell.swift; sourceTree = "<group>"; };
 		464FB39D227FF3BA007C438A /* CNCollectionListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollectionListCell.swift; sourceTree = "<group>"; };
 		464FB3A0227FF90D007C438A /* CNSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSetting.swift; sourceTree = "<group>"; };
+		464FB3A42280335F007C438A /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		469E38912275733E00840E3A /* CNHomeCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeCollectionCell.swift; sourceTree = "<group>"; };
 		469E389522759B4600840E3A /* CNHomeContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeContentViewController.swift; sourceTree = "<group>"; };
 		469E38972275CE6800840E3A /* CNHomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeTableViewCell.swift; sourceTree = "<group>"; };
@@ -79,6 +80,7 @@
 		462E2A2022753582002A1FE7 = {
 			isa = PBXGroup;
 			children = (
+				464FB3A22280330C007C438A /* Asset */,
 				462E2A2B22753582002A1FE7 /* cnode-swift-ios */,
 				462E2A2A22753582002A1FE7 /* Products */,
 				D971F75E44FEE55D1146663E /* Pods */,
@@ -181,6 +183,14 @@
 				464FB3A0227FF90D007C438A /* CNSetting.swift */,
 			);
 			path = Setting;
+			sourceTree = "<group>";
+		};
+		464FB3A22280330C007C438A /* Asset */ = {
+			isa = PBXGroup;
+			children = (
+				464FB3A42280335F007C438A /* iconfont.ttf */,
+			);
+			path = Asset;
 			sourceTree = "<group>";
 		};
 		469E38902275730300840E3A /* Home */ = {
@@ -298,8 +308,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				464FB3A522803373007C438A /* iconfont.ttf in Resources */,
 				462E2A4622754206002A1FE7 /* Assets.xcassets in Resources */,
-				462E2A3722753583002A1FE7 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

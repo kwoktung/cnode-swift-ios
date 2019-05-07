@@ -16,7 +16,7 @@ class CNSettingViewController: UIViewController {
         self.view.addSubview(button);
         button.layer.cornerRadius = 22.5;
         button.setTitle("退出登录", for: .normal);
-        button.backgroundColor = UIColor.init(red: 63/255, green: 218/255, blue: 198/255, alpha: 1);
+        button.backgroundColor = UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1);
         button.snp.makeConstraints { (make) in
             make.height.equalTo(45);
             make.width.equalTo(280);
@@ -28,7 +28,7 @@ class CNSettingViewController: UIViewController {
     
     @objc func loggout() {
         let controller = UIAlertController.init(title: nil, message: "退出登录", preferredStyle: .alert);
-        let confirm = UIAlertAction.init(title: "确定", style: .destructive) { (UIAlertAction) in
+        let confirm = UIAlertAction.init(title: "确定", style: .default) { (UIAlertAction) in
              CNUserService.shared.logout();
             self.navigationController?.popToRootViewController(animated: true);
         }

@@ -32,9 +32,13 @@ class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITa
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true);
+        var parameters: Dictionary = ["mdrender": "false"]
+        if(CNUserService.shared.isLogin) {
+            parameters["accesstoken"] = CNUserService.shared.accesstoken
+        }
         if let topic = recent_topics?[indexPath.item] {
             Alamofire.request("https://cnodejs.org/api/v1/topic/\(topic["id"].stringValue)",
-                parameters: ["mdrender": "false"]).responseJSON { (response) in
+                parameters: parameters).responseJSON { (response) in
                     let json = JSON(response.result.value!)
                     if(json["success"].boolValue) {
                         let data = json["data"];

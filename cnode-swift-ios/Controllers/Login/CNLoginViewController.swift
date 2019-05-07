@@ -24,7 +24,7 @@ class CNLoginViewController: UIViewController {
         self.view.addSubview(submit);
         submit.layer.cornerRadius = 25;
         submit.setTitle("登录", for: .normal);
-        submit.backgroundColor = UIColor.init(red: 63/255, green: 218/255, blue: 198/255, alpha: 1);
+        submit.backgroundColor = UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1);
         submit.snp.makeConstraints { (make) in
             make.width.equalTo(280);
             make.height.equalTo(50);

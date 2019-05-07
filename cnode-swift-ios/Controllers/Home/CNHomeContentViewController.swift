@@ -63,6 +63,7 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
                 parameters: [
                     "tab": self.type!, "mdrender": false, "limit": self.limit, "page": self.page
                 ])
+                .validate()
                 .responseJSON {(response) in
                     let json = JSON(response.result.value!);
                     DispatchQueue.main.async { callback(json); }

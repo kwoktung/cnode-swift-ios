@@ -13,11 +13,13 @@ import AlamofireImage
 import SwiftDate
 import WebKit
 
+private var heightCache:[String: CGFloat] = [:];
+
 class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, WKNavigationDelegate {
     let tableView = UITableView();
     var topic: JSON!;
     var replyArr:[JSON] = [];
-    var webHeight: CGFloat = UITableView.automaticDimension;
+    let isCollect = UIButton();
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return replyArr.count == 0 ? 1 : 2
@@ -38,7 +40,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if(indexPath.section == 0 && indexPath.item == 1) {
-            return self.webHeight;
+            return heightCache[topic["id"].stringValue] ?? UITableView.automaticDimension;
         }
         return UITableView.automaticDimension;
     }
@@ -84,7 +86,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
                     """;
                     webviewCell?.webView.loadHTMLString(html, baseURL: nil);
                     webviewCell?.refresh = {(_ height: CGFloat) -> () in
-                        self.webHeight = height;
+                        heightCache[topic["id"].stringValue] = height;
                         self.tableView.reloadRows(at: [indexPath], with: .none);
                     };
                 }
@@ -110,13 +112,26 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func loadData(topicId: String?) {
         if let topicId = topicId {
+            var parameters: Dictionary = ["mdrender": "false"]
+            if(CNUserService.shared.isLogin) {
+                parameters["accesstoken"] = CNUserService.shared.accesstoken
+            }
             Alamofire.request(
                 "https://cnodejs.org/api/v1/topic/\(topicId)",
-                parameters: ["mdrender": "false"
-                ]).responseJSON {(response) in
+                parameters: parameters)
+                .validate()
+                .responseJSON {(response) in
                     let json = JSON(response.result.value!);
+                    self.topic = json["data"];
                     self.replyArr = json["data"]["replies"].arrayValue;
                     self.tableView.reloadData();
+                    if(json["data"]["is_collect"].boolValue) {
+                        self.isCollect.setTitle("\u{e62c}取消收藏", for: .normal);
+                        self.isCollect.setTitleColor(UIColor.init(red: 45/255, green: 88/255, blue: 163/255, alpha: 1), for: .normal);
+                    } else {
+                        self.isCollect.setTitle("\u{e62c}收藏", for: .normal);
+                        self.isCollect.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
+                    }
             }
         }
     }
@@ -136,11 +151,97 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.register(CNTopicContentCell.self, forCellReuseIdentifier: "CNTopicContentCell");
         tableView.register(CNTopicContentWebViewCell.self, forCellReuseIdentifier: "CNTopicContentWebViewCell")
         self.view.addSubview(tableView);
+        let inset: UIEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: CNUserService.shared.isLogin ? 56 : 0, right: 0);
         tableView.snp.makeConstraints { (make) in
-            make.edges.equalTo(self.view);
+            make.edges.equalTo(self.view.safeAreaLayoutGuide).inset(inset);
         }
         if(self.replyArr.count == 0) {
             self.loadData(topicId: topic["id"].stringValue);
+        }
+        
+        if(CNUserService.shared.isLogin) {
+            let toolbar = UIView();
+            toolbar.backgroundColor = UIColor.white;
+            toolbar.layer.shadowColor = UIColor.init(red: 26/255, green: 26/255, blue: 26/255, alpha: 1).cgColor;
+            toolbar.layer.shadowOpacity = 0.1;
+            toolbar.layer.shadowOffset = CGSize(width: 0, height: -3)
+            
+            self.view.addSubview(toolbar);
+            toolbar.snp.makeConstraints { (make) in
+                make.width.equalTo(self.view);
+                make.height.equalTo(50);
+                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom);
+                make.left.equalTo(self.view);
+            }
+            
+            let comment = UIButton();
+            toolbar.addSubview(comment);
+            comment.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
+            comment.setTitle("\u{e6fb}添加评论", for: .normal);
+            comment.titleLabel?.font = UIFont.init(name: "iconfont", size: 18)
+            comment.snp.makeConstraints { (make) in
+                make.centerY.equalTo(toolbar);
+                make.left.equalTo(toolbar).offset(15);
+            }
+            
+            if(topic["is_collect"].boolValue) {
+                isCollect.setTitle("\u{e62c}取消收藏", for: .normal);
+                isCollect.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
+            } else {
+                isCollect.setTitle("\u{e62c}收藏", for: .normal);
+                isCollect.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
+            }
+            
+            
+            isCollect.titleLabel?.font = UIFont.init(name: "iconfont", size: 19);
+            toolbar.addSubview(isCollect);
+            isCollect.snp.makeConstraints { (make) in
+                make.centerY.equalTo(toolbar);
+                make.left.equalTo(comment.snp.right).offset(10);
+            }
+            isCollect.addTarget(self, action: #selector(onCollect), for: .touchUpInside);
+        }
+    }
+    
+    @objc func onCollect() {
+        if(topic["is_collect"].boolValue) {
+            self.topicDecollect {
+                self.isCollect.setTitle("\u{e62c}收藏", for: .normal);
+                self.isCollect.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
+            }
+        } else {
+            self.topicCollect {
+                self.isCollect.setTitle("\u{e62c}取消收藏", for: .normal);
+                self.isCollect.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
+            }
+        }
+    }
+    
+    func topicCollect(_ handler: (() -> Void)?) {
+        if let accesstoken = CNUserService.shared.accesstoken {
+            Alamofire.request(
+                "https://cnodejs.org/api/v1/topic_collect/collect",
+                method: .post,
+                parameters: ["accesstoken": accesstoken, "topic_id": topic["id"].stringValue]
+                )
+                .validate()
+                .responseJSON { (make) in
+                    handler?()
+            }
+        }
+    }
+    
+    func topicDecollect(_ handler: (() -> Void)?) {
+        if let accesstoken = CNUserService.shared.accesstoken {
+            Alamofire.request(
+                "https://cnodejs.org/api/v1/topic_collect/de_collect",
+                method: .post,
+                parameters: ["accesstoken": accesstoken, "topic_id": topic["id"].stringValue]
+                )
+                .validate()
+                .responseJSON { (make) in
+                    handler?();
+            }
         }
     }
 }
