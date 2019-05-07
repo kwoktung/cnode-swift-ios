@@ -48,7 +48,7 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
         tableView.deselectRow(at: indexPath, animated: true);
         let topic = dataArr[indexPath.item];
         let controller = CNTopicViewController();
-        controller.topic = topic;
+        controller.topicId = topic["id"].stringValue;
         self.parent?.navigationController?.pushViewController(controller, animated: true);
     }
     
@@ -61,7 +61,7 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
             Alamofire.request(
                 "https://cnodejs.org/api/v1/topics",
                 parameters: [
-                    "tab": self.type!, "mdrender": false, "limit": self.limit, "page": self.page
+                    "tab": self.type!, "mdrender": "false", "limit": self.limit, "page": self.page
                 ])
                 .validate()
                 .responseJSON {(response) in

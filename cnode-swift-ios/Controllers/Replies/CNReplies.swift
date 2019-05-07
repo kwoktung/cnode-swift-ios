@@ -33,17 +33,9 @@ class CNRepliesViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true);
         if let topic = recent_replies?[indexPath.item] {
-            Alamofire.request("https://cnodejs.org/api/v1/topic/\(topic["id"].stringValue)",
-                parameters: ["mdrender": "false"]).responseJSON { (response) in
-                    let json = JSON(response.result.value!)
-                    if(json["success"].boolValue) {
-                        let data = json["data"];
-                        let controller = CNTopicViewController()
-                        controller.topic = data;
-                        controller.replyArr = data["replies"].arrayValue;
-                        self.navigationController?.pushViewController(controller, animated: true);
-                    }
-            }
+            let controller = CNTopicViewController()
+            controller.topicId = topic["id"].stringValue;
+            self.navigationController?.pushViewController(controller, animated: true);
         }
     }
     

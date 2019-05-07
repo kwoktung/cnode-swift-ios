@@ -17,9 +17,11 @@ private var heightCache:[String: CGFloat] = [:];
 
 class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, WKNavigationDelegate {
     let tableView = UITableView();
+    let isCollect = UIButton();
+    
+    var topicId: String!;
     var topic: JSON!;
     var replyArr:[JSON] = [];
-    let isCollect = UIButton();
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return replyArr.count == 0 ? 1 : 2
@@ -32,10 +34,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         return section == 1 ? "全部评论": nil
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if(section == 1) {
-            return 50
-        }
-        return 0
+        return section == 1 ? 50 : 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -110,36 +109,22 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func loadData(topicId: String?) {
-        if let topicId = topicId {
-            var parameters: Dictionary = ["mdrender": "false"]
-            if(CNUserService.shared.isLogin) {
-                parameters["accesstoken"] = CNUserService.shared.accesstoken
-            }
-            Alamofire.request(
-                "https://cnodejs.org/api/v1/topic/\(topicId)",
-                parameters: parameters)
-                .validate()
-                .responseJSON {(response) in
-                    let json = JSON(response.result.value!);
-                    self.topic = json["data"];
-                    self.replyArr = json["data"]["replies"].arrayValue;
-                    self.tableView.reloadData();
-                    if(json["data"]["is_collect"].boolValue) {
-                        self.isCollect.setTitle("\u{e62c}取消收藏", for: .normal);
-                        self.isCollect.setTitleColor(UIColor.init(red: 45/255, green: 88/255, blue: 163/255, alpha: 1), for: .normal);
-                    } else {
-                        self.isCollect.setTitle("\u{e62c}收藏", for: .normal);
-                        self.isCollect.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
-                    }
-            }
+    func loadData(_ mdrender: String, with callback: @escaping (JSON) -> Void) {
+        var parameters: Dictionary = ["mdrender": mdrender]
+        if(CNUserService.shared.isLogin) {
+            parameters["accesstoken"] = CNUserService.shared.accesstoken
+        }
+        Alamofire.request(
+            "https://cnodejs.org/api/v1/topic/\(self.topicId!)",
+            parameters: parameters)
+            .validate()
+            .responseJSON { (response) in
+                let json = JSON(response.result.value!);
+                callback(json["data"])
         }
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad();
-        self.view.backgroundColor = UIColor.white;
-     
+    
+    func refreshView() {
         tableView.tableFooterView = UIView();
         tableView.separatorStyle = .none
         tableView.dataSource = self;
@@ -150,13 +135,11 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.register(CNTopicReplyCell.self, forCellReuseIdentifier: "CNTopicReplyCell");
         tableView.register(CNTopicContentCell.self, forCellReuseIdentifier: "CNTopicContentCell");
         tableView.register(CNTopicContentWebViewCell.self, forCellReuseIdentifier: "CNTopicContentWebViewCell")
-        self.view.addSubview(tableView);
+        view.addSubview(tableView);
+        
         let inset: UIEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: CNUserService.shared.isLogin ? 56 : 0, right: 0);
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view.safeAreaLayoutGuide).inset(inset);
-        }
-        if(self.replyArr.count == 0) {
-            self.loadData(topicId: topic["id"].stringValue);
         }
         
         if(CNUserService.shared.isLogin) {
@@ -166,7 +149,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
             toolbar.layer.shadowOpacity = 0.1;
             toolbar.layer.shadowOffset = CGSize(width: 0, height: -3)
             
-            self.view.addSubview(toolbar);
+            view.addSubview(toolbar);
             toolbar.snp.makeConstraints { (make) in
                 make.width.equalTo(self.view);
                 make.height.equalTo(50);
@@ -192,9 +175,8 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
                 isCollect.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
             }
             
-            
             isCollect.titleLabel?.font = UIFont.init(name: "iconfont", size: 19);
-            toolbar.addSubview(isCollect);
+            toolbar.addSubview(self.isCollect);
             isCollect.snp.makeConstraints { (make) in
                 make.centerY.equalTo(toolbar);
                 make.left.equalTo(comment.snp.right).offset(10);
@@ -203,14 +185,39 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad();
+        self.view.backgroundColor = UIColor.white;
+        let group = DispatchGroup.init();
+        group.enter()
+        DispatchQueue.global().async(group: group, qos: .default, flags: .inheritQoS) {
+            self.loadData("false", with: { (json) in
+                self.replyArr = json["replies"].arrayValue;
+                group.leave();
+            })
+        }
+        group.enter();
+        DispatchQueue.global().async(group: group, qos: .default, flags: .inheritQoS) {
+            self.loadData("true", with: { (json) in
+                self.topic = json;
+                group.leave();
+            })
+        }
+        group.notify(queue: DispatchQueue.main) {
+            self.refreshView();
+        }
+    }
+    
     @objc func onCollect() {
         if(topic["is_collect"].boolValue) {
             self.topicDecollect {
+                self.topic["is_collect"] = JSON(false);
                 self.isCollect.setTitle("\u{e62c}收藏", for: .normal);
                 self.isCollect.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
             }
         } else {
             self.topicCollect {
+                self.topic["is_collect"] = JSON(true);
                 self.isCollect.setTitle("\u{e62c}取消收藏", for: .normal);
                 self.isCollect.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
             }

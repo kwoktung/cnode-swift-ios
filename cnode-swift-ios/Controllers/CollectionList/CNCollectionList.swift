@@ -37,21 +37,9 @@ class CNCollectionListViewController: UIViewController, UITableViewDelegate, UIT
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false);
         if let topic = topicArr?[indexPath.item] {
-            var parameters: Dictionary = ["mdrender": "false"]
-            if(CNUserService.shared.isLogin) {
-                parameters["accesstoken"] = CNUserService.shared.accesstoken
-            }
-            Alamofire.request("https://cnodejs.org/api/v1/topic/\(topic["id"].stringValue)",
-                parameters: parameters).responseJSON { (response) in
-                    let json = JSON(response.result.value!)
-                    if(json["success"].boolValue) {
-                        let data = json["data"];
-                        let controller = CNTopicViewController()
-                        controller.topic = data;
-                        controller.replyArr = data["replies"].arrayValue;
-                        self.navigationController?.pushViewController(controller, animated: true);
-                    }
-            }
+            let controller = CNTopicViewController()
+            controller.topicId = topic["id"].stringValue;
+            self.navigationController?.pushViewController(controller, animated: true);
         }
     }
     
