@@ -114,15 +114,15 @@ class CNNewTopicViewController: UIViewController {
                             "_csrf": csrf
                         ]
                         ).validate()
-                        .response(queue: DispatchQueue.main, completionHandler: { ( reponse:DefaultDataResponse) in
+                        .responseData(queue: DispatchQueue.main, completionHandler: { (data:DataResponse) in
                             SVProgressHUD.showSuccess(withStatus: "创建成功")
-                            if let location = reponse.request?.value(forHTTPHeaderField: "Location")
-                                {
-                                    let controller = CNTopicViewController();
-                                    controller.topicId = String.init(location.split(separator: "/").last!);
-                                    self.navigationController?.pushViewController(controller, animated: true);
+                            if let topicId = data.response?.url?.lastPathComponent
+                            {
+                                let controller = CNTopicViewController();
+                                controller.topicId = topicId;
+                                self.navigationController?.pushViewController(controller, animated: true);
                             } else {
-                                  self.navigationController?.popViewController(animated: true);
+                                self.navigationController?.popViewController(animated: true);
                             }
                         })
                 }
