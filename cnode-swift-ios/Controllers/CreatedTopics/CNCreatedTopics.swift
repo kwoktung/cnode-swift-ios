@@ -10,9 +10,20 @@ import UIKit
 import SwiftyJSON
 import SwiftDate
 import Alamofire
+import SwiftSoup
 
 class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var recent_topics:[JSON]?;
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction.init(style: .destructive, title: "删除") { (action: UIContextualAction, view: UIView, completionHandler: @escaping (Bool)->Void) in
+            guard let topic = self.recent_topics?[indexPath.item]["id"].string else { completionHandler(false); return }
+            self.onTopicDelete(topic, with: completionHandler);
+        }
+        let config = UISwipeActionsConfiguration.init(actions: [action]);
+        return config;
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recent_topics?.count ?? 0;
     }
@@ -63,6 +74,25 @@ class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITa
         self.view.addSubview(tableView);
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
+        }
+    }
+    
+    func onTopicDelete(_ topicId: String, with completionHandler: @escaping (Bool) -> Void) {
+        DispatchQueue.global().async {
+            Alamofire.request("https://cnodejs.org/signin").responseString { (response) in
+                if let doc: Document = try? SwiftSoup.parse(response.result.value!),
+                    let element: Element = try! doc.select("[name='_csrf']").first(),
+                    let csrf = try? element.attr("value") {
+                    Alamofire.request(
+                        "https://cnodejs.org/topic/\(topicId)/delete",
+                        method: .post,
+                        parameters: ["_csrf": csrf]
+                        ).validate()
+                        .responseData(queue: DispatchQueue.main, completionHandler: { (data:DataResponse) in
+                            completionHandler(true)
+                        })
+                }
+            }
         }
     }
 }
