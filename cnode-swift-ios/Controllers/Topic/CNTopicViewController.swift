@@ -117,10 +117,13 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         Alamofire.request(
             "https://cnodejs.org/api/v1/topic/\(self.topicId!)",
             parameters: parameters)
-            .validate()
             .responseJSON { (response) in
-                let json = JSON(response.result.value!);
-                callback(json["data"])
+                switch response.result {
+                case .success(let value):
+                    callback(JSON(value)["data"])
+                case .failure(_):
+                    self.navigationController?.popViewController(animated: true);
+                }
         }
     }
     

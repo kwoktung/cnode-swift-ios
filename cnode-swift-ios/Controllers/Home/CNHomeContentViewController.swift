@@ -65,8 +65,13 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
                 ])
                 .validate()
                 .responseJSON {(response) in
-                    let json = JSON(response.result.value!);
-                    DispatchQueue.main.async { callback(json); }
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value);
+                        DispatchQueue.main.async { callback(json);}
+                    case .failure(_):
+                        ()
+                    }
             }
         }
     }
@@ -83,7 +88,7 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad();
         self.view.backgroundColor = UIColor.white;
-        self.loadData { (json) in
+        self.loadData {[unowned self] (json) in
             self.dataArr = json["data"].arrayValue;
             self.tableView = UITableView();
             self.tableView.dataSource = self;

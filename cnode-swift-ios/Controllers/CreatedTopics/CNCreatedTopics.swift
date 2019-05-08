@@ -14,6 +14,7 @@ import SwiftSoup
 
 class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var recent_topics:[JSON]?;
+    var tableView = UITableView();
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction.init(style: .destructive, title: "删除") { (action: UIContextualAction, view: UIView, completionHandler: @escaping (Bool)->Void) in
@@ -64,7 +65,6 @@ class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITa
         super.viewDidLoad();
         self.view.backgroundColor = UIColor.white;
         
-        let tableView = UITableView();
         tableView.dataSource = self;
         tableView.delegate = self;
         tableView.rowHeight = 60;
@@ -74,6 +74,17 @@ class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITa
         self.view.addSubview(tableView);
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
+        }
+        if let loginname = CNUserService.shared.loginname {
+            Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)").responseJSON { (response) in
+                let json = JSON(response.result.value!)
+                if(json["success"].boolValue) {
+                    if let data = json["data"].dictionary {
+                        self.recent_topics = data["recent_topics"]?.arrayValue;
+                        self.tableView.reloadData();
+                    }
+                }
+            }
         }
     }
     
@@ -89,7 +100,12 @@ class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITa
                         parameters: ["_csrf": csrf]
                         ).validate()
                         .responseData(queue: DispatchQueue.main, completionHandler: { (data:DataResponse) in
-                            completionHandler(true)
+                            switch data.result {
+                            case .success(_):
+                                completionHandler(true)
+                            case .failure(_):
+                                completionHandler(false)
+                            }
                         })
                 }
             }
