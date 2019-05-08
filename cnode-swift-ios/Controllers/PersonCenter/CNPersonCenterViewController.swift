@@ -18,13 +18,12 @@ let dataArr = [
     [ "text": "设置", "value": 3 ]];
 
 class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    var loginname: String?;
-    var avatar_url: String?
-    var create_at: String?
     var recent_topics:[JSON]? = [];
     var recent_replies:[JSON]? = [];
     
-    private var headerView: UIView!;
+    let username = UILabel();
+    let datetime = UILabel();
+    let avator = UIImageView();
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataArr.count;
@@ -39,8 +38,12 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = dataArr[indexPath.item];
         tableView.deselectRow(at: indexPath, animated: false);
+        if(CNUserService.shared.isLogin != true) {
+            self.onWithoutLogin();
+            return
+        }
+        let item = dataArr[indexPath.item];
         switch item["value"] as! Int {
         case 0:
             let controller = CNCreatedTopicsViewController();
@@ -61,10 +64,20 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
+    func onWithoutLogin() {
+        let controller = UIAlertController.init(title: nil, message: "请先登录", preferredStyle: .alert);
+        let confirm = UIAlertAction.init(title: "确定", style: .default) { (action) in
+            self.navigationController?.pushViewController(CNLoginCSRFViewController(), animated: true);
+        }
+        let cancel = UIAlertAction.init(title: "取消", style: .cancel, handler: nil);
+        controller.addAction(confirm);
+        controller.addAction(cancel);
+        self.present(controller, animated: true, completion: nil);
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        headerView = UIView();
+        let headerView = UIView();
         headerView.backgroundColor = UIColor.gray;
         self.view.addSubview(headerView);
         headerView.snp.makeConstraints { (make) in
@@ -73,6 +86,34 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
             make.top.equalTo(self.view);
             make.left.equalTo(self.view);
         }
+        
+        avator.layer.cornerRadius = 50;
+        avator.layer.masksToBounds = true;
+        
+        headerView.addSubview(avator);
+        avator.snp.makeConstraints({ (make) in
+            make.width.height.equalTo(100);
+            make.centerX.equalTo(headerView);
+            make.centerY.equalTo(headerView).offset(-25);
+        })
+        
+        headerView.addSubview(username);
+        username.font = UIFont.systemFont(ofSize: 20);
+        username.textColor = UIColor.white;
+        username.snp.makeConstraints({ (make) in
+            make.top.equalTo(avator.snp.bottom).offset(10);
+            make.centerX.equalTo(avator.snp.centerX);
+        });
+        
+        
+        datetime.font = UIFont.systemFont(ofSize: 16);
+        datetime.textColor = UIColor.white;
+        
+        headerView.addSubview(datetime);
+        datetime.snp.makeConstraints({ (make) in
+            make.top.equalTo(username.snp.bottom).offset(10);
+            make.centerX.equalTo(headerView);
+        })
 
         let contentView = UITableView();
         contentView.dataSource = self;
@@ -89,58 +130,39 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
             make.height.equalTo(60*dataArr.count);
         }
         self.loadData();
+        NotificationCenter.default.addObserver(self, selector:#selector(loadData), name: Notification.Name.init("UserLoginStatusChanged"), object: nil);
     }
     
+    @objc
     func loadData() {
         if let loginname = CNUserService.shared.loginname {
             Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)").responseJSON { (response) in
                 let json = JSON(response.result.value!)
                 if(json["success"].boolValue) {
-                    guard let data = json["data"].dictionary else { return };
-                    self.loginname = loginname;
-                    self.avatar_url = data["avatar_url"]?.stringValue;
-                    self.create_at = data["create_at"]?.stringValue;
+                    guard let data = json["data"].dictionary,
+                        let avatar_url = data["avatar_url"]?.string,
+                        let create_at = data["create_at"]?.string
+                        else { return };
+                    
                     self.recent_topics = data["recent_topics"]?.arrayValue;
                     self.recent_replies = data["recent_replies"]?.arrayValue;
                     
-                    let avator = UIImageView();
-                    avator.layer.cornerRadius = 50;
-                    avator.layer.masksToBounds = true;
-                    avator.af_setImage(withURL: URL.init(string: self.avatar_url!)!);
-                    self.headerView.addSubview(avator);
-                    avator.snp.makeConstraints({ (make) in
-                        make.width.height.equalTo(100);
-                        make.centerX.equalTo(self.headerView);
-                        make.centerY.equalTo(self.headerView).offset(-25);
-                    })
-                    
-                    let loginname = UILabel();
-                    self.headerView.addSubview(loginname);
-                    loginname.font = UIFont.systemFont(ofSize: 20);
-                    loginname.textColor = UIColor.white;
-                    loginname.text = self.loginname;
-                    loginname.snp.makeConstraints({ (make) in
-                        make.top.equalTo(avator.snp.bottom).offset(10);
-                        make.centerX.equalTo(avator.snp.centerX);
-                    });
-                    
-                    let create_at = UILabel();
-                    create_at.font = UIFont.systemFont(ofSize: 16);
-                    create_at.textColor = UIColor.white;
-                    
-                    self.headerView.addSubview(create_at);
-                    create_at.snp.makeConstraints({ (make) in
-                        make.top.equalTo(loginname.snp.bottom).offset(10);
-                        make.centerX.equalTo(self.headerView);
-                    })
-                    if let createAt = self.create_at,
-                        let createAtTime = createAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese)
+                    self.username.text = loginname;
+                    self.avator.af_setImage(withURL: URL.init(string: avatar_url)!);
+                    if let createAtTime = create_at.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese)
                         {
-                        create_at.text = "\(createAtTime)加入社区"
+                        self.datetime.text = "\(createAtTime)加入社区"
                     }
-                    
                 }
             }
+        } else {
+            self.username.text = "匿名";
+            self.avator.image = UIImage.init(named: "logo");
+            self.datetime.text = "登录后开启更多功能"
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self);
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class CNSettingViewController: UIViewController {
     override func viewDidLoad() {
@@ -20,7 +21,7 @@ class CNSettingViewController: UIViewController {
         button.snp.makeConstraints { (make) in
             make.height.equalTo(45);
             make.width.equalTo(280);
-            make.center.equalTo(self.view);
+            make.center.equalTo(view);
         }
         button.addTarget(self, action: #selector(loggout), for: .touchUpInside);
         self.view.addSubview(button);
@@ -29,8 +30,11 @@ class CNSettingViewController: UIViewController {
     @objc func loggout() {
         let controller = UIAlertController.init(title: nil, message: "退出登录", preferredStyle: .alert);
         let confirm = UIAlertAction.init(title: "确定", style: .default) { (UIAlertAction) in
-             CNUserService.shared.logout();
-            self.navigationController?.popToRootViewController(animated: true);
+            Alamofire.request("https://cnodejs.org/signout").responseData(completionHandler: { (_) in
+                CNUserService.shared.logout();
+                NotificationCenter.default.post(name: Notification.Name.init("UserLoginStatusChanged"), object: nil);
+                self.navigationController?.popToRootViewController(animated: true);
+            })
         }
         let cancel = UIAlertAction.init(title: "取消", style: .cancel, handler: nil);
         controller.addAction(confirm);

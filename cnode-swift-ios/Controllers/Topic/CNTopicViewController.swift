@@ -136,50 +136,41 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.register(CNTopicContentCell.self, forCellReuseIdentifier: "CNTopicContentCell");
         tableView.register(CNTopicContentWebViewCell.self, forCellReuseIdentifier: "CNTopicContentWebViewCell")
         view.addSubview(tableView);
-        
-        let inset: UIEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: CNUserService.shared.isLogin ? 56 : 0, right: 0);
+
         tableView.snp.makeConstraints { (make) in
-            make.edges.equalTo(self.view.safeAreaLayoutGuide).inset(inset);
+            make.edges.equalTo(self.view);
         }
         
         if(CNUserService.shared.isLogin) {
-            let toolbar = UIView();
-            toolbar.backgroundColor = UIColor.white;
-            toolbar.layer.shadowColor = UIColor.init(red: 26/255, green: 26/255, blue: 26/255, alpha: 1).cgColor;
-            toolbar.layer.shadowOpacity = 0.1;
-            toolbar.layer.shadowOffset = CGSize(width: 0, height: -3)
-            
-            view.addSubview(toolbar);
-            toolbar.snp.makeConstraints { (make) in
-                make.width.equalTo(self.view);
-                make.height.equalTo(50);
-                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom);
-                make.left.equalTo(self.view);
-            }
-            
             let comment = UIButton();
-            toolbar.addSubview(comment);
-            comment.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
-            comment.setTitle("\u{e6fb}添加评论", for: .normal);
-            comment.titleLabel?.font = UIFont.init(name: "iconfont", size: 18)
+            view.addSubview(comment);
+            comment.layer.cornerRadius = 30;
+            comment.layer.masksToBounds = true;
+            comment.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
+            comment.setTitle("\u{e617}", for: .normal);
+            comment.titleLabel?.font = UIFont.init(name: "iconfont", size: 40)
             comment.snp.makeConstraints { (make) in
-                make.centerY.equalTo(toolbar);
-                make.left.equalTo(toolbar).offset(15);
+                make.width.height.equalTo(60);
+                make.right.equalTo(view).offset(-20);
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20);
             }
+            comment.addTarget(self, action: #selector(onComment), for: .touchUpInside);
             
+            view.addSubview(isCollect);
+            isCollect.setTitle("\u{e62c}", for: .normal);
+            isCollect.titleLabel?.font = UIFont.init(name: "iconfont", size: 50);
+            isCollect.layer.cornerRadius = 30;
+            isCollect.layer.masksToBounds = true;
             if(topic["is_collect"].boolValue) {
-                isCollect.setTitle("\u{e62c}取消收藏", for: .normal);
                 isCollect.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
             } else {
-                isCollect.setTitle("\u{e62c}收藏", for: .normal);
                 isCollect.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
             }
-            
-            isCollect.titleLabel?.font = UIFont.init(name: "iconfont", size: 19);
-            toolbar.addSubview(self.isCollect);
+
             isCollect.snp.makeConstraints { (make) in
-                make.centerY.equalTo(toolbar);
-                make.left.equalTo(comment.snp.right).offset(10);
+                make.width.height.equalTo(60);
+                make.right.equalTo(view).offset(-15);
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100);
             }
             isCollect.addTarget(self, action: #selector(onCollect), for: .touchUpInside);
         }
@@ -206,22 +197,49 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         group.notify(queue: DispatchQueue.main) {
             self.refreshView();
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(onTopicNeedUpdateReplies), name: NSNotification.Name(rawValue: "TopicNeedUpdateReplies"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self);
+    }
+    
+    @objc
+    func onTopicNeedUpdateReplies() {
+        DispatchQueue.global().async {
+            self.loadData("false", with: { (json) in
+                let len = self.replyArr.count;
+                self.replyArr = json["replies"].arrayValue;
+                DispatchQueue.main.async {
+                    if (len == 0) {
+                        self.tableView.reloadData();
+                    } else {
+                        self.tableView.reloadSections(IndexSet.init(integer: 1), with: .none);
+                    }
+                }
+            })
+        }
     }
     
     @objc func onCollect() {
         if(topic["is_collect"].boolValue) {
             self.topicDecollect {
                 self.topic["is_collect"] = JSON(false);
-                self.isCollect.setTitle("\u{e62c}收藏", for: .normal);
                 self.isCollect.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
             }
         } else {
             self.topicCollect {
                 self.topic["is_collect"] = JSON(true);
-                self.isCollect.setTitle("\u{e62c}取消收藏", for: .normal);
                 self.isCollect.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
             }
         }
+    }
+    
+    @objc
+    func onComment() {
+        let controller = CNTopicCommentViewController();
+        controller.topicId = topicId;
+        self.navigationController?.pushViewController(controller, animated: true);
     }
     
     func topicCollect(_ handler: (() -> Void)?) {

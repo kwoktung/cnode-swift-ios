@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import SVProgressHUD
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds);
         window?.rootViewController = UINavigationController(rootViewController: CNDashboardViewConntroller());
         window?.makeKeyAndVisible();
+        SVProgressHUD.setDefaultStyle(.dark);
+        SVProgressHUD.setMaximumDismissTimeInterval(1);
         // Override point for customization after application launch.
         return true
     }

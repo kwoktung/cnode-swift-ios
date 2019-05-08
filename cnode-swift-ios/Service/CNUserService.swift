@@ -46,17 +46,21 @@ class CNUserService {
     
     private init () { }
     
-    public func login(_ handler: completeHandler?) {
-        Alamofire.request("https://cnodejs.org/api/v1/accesstoken", method: .post, parameters: ["accesstoken": "5d66a8f4-b1ab-426f-81d5-f35a997872a8"]).responseJSON(completionHandler: { (response) in
-            let json = JSON(response.result.value!);
-            if (json["success"].boolValue){
-                UserDefaults.standard.set(json["loginname"].string, forKey: "loginname");
-                UserDefaults.standard.set(json["id"].string, forKey: "id");
-                UserDefaults.standard.set(json["avatar_url"].string, forKey: "avatar_url");
-                UserDefaults.standard.set("5d66a8f4-b1ab-426f-81d5-f35a997872a8", forKey: "accesstoken");
-                handler?();
-            }
-        });
+    public func login(_ accesstoken:String, with handler: completeHandler?) {
+        Alamofire.request(
+            "https://cnodejs.org/api/v1/accesstoken",
+            method: .post,
+            parameters: ["accesstoken": accesstoken])
+            .responseJSON(completionHandler: { (response) in
+                let json = JSON(response.result.value!);
+                if (json["success"].boolValue){
+                    UserDefaults.standard.set(json["loginname"].string, forKey: "loginname");
+                    UserDefaults.standard.set(json["id"].string, forKey: "id");
+                    UserDefaults.standard.set(json["avatar_url"].string, forKey: "avatar_url");
+                    UserDefaults.standard.set(accesstoken, forKey: "accesstoken");
+                    handler?();
+                }
+            });
     }
 
     public func logout() {
