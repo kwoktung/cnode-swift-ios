@@ -23,6 +23,23 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
     var topic: JSON!;
     var replyArr:[JSON] = [];
     
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        var actions: [UIContextualAction] = [];
+        if (!CNUserService.shared.isLogin) { return UISwipeActionsConfiguration.init(actions: actions); }
+        if (indexPath.section == 1) {
+            let reply = replyArr[indexPath.item];
+            let replyId = reply["id"].stringValue;
+            let username = reply["author"]["loginname"].stringValue;
+            if(username == CNUserService.shared.loginname) {
+                let action = UIContextualAction.init(style: .destructive, title: "删除") { (_ UIContextualAction, _ UIView, handler: @escaping (Bool) -> Void) in
+                    self.onDeleteReply(replyId, with: handler);
+                }
+                actions.append(action);
+            }
+        }
+        return UISwipeActionsConfiguration.init(actions: actions);
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return replyArr.count == 0 ? 1 : 2
     }
@@ -172,8 +189,8 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
 
             isCollect.snp.makeConstraints { (make) in
                 make.width.height.equalTo(60);
-                make.right.equalTo(view).offset(-15);
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100);
+                make.left.equalTo(view).offset(20);
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20);
             }
             isCollect.addTarget(self, action: #selector(onCollect), for: .touchUpInside);
         }
@@ -205,6 +222,28 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     deinit {
         NotificationCenter.default.removeObserver(self);
+    }
+    
+    @objc
+    func onDeleteReply(_ replyId: String, with completionHandler: @escaping (Bool) -> Void) {
+        DispatchQueue.global().async {
+            CNCSRFTokenService.standard.getCSRFToken({ (csrf :String) in
+                Alamofire.request(
+                    "https://cnodejs.org/reply/\(replyId)/delete",
+                    method: .post,
+                    parameters: ["reply_id": replyId, "_csrf": csrf]
+                )
+                .validate()
+                .responseData(completionHandler: { (response) in
+                    switch response.result {
+                    case .success(_):
+                         completionHandler(true);
+                    case .failure(_):
+                        ()
+                    }
+                })
+            })
+        }
     }
     
     @objc

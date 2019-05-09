@@ -21,7 +21,7 @@
 		464FB39E227FF3BA007C438A /* CNCollectionListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB39D227FF3BA007C438A /* CNCollectionListCell.swift */; };
 		464FB3A1227FF90D007C438A /* CNSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3A0227FF90D007C438A /* CNSetting.swift */; };
 		464FB3AB228166B2007C438A /* CNNewTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3AA228166B2007C438A /* CNNewTopic.swift */; };
-		464FB3AD22817DF3007C438A /* CNHTMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3AC22817DF3007C438A /* CNHTMLParser.swift */; };
+		464FB3AD22817DF3007C438A /* CNCSRFTokenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3AC22817DF3007C438A /* CNCSRFTokenService.swift */; };
 		464FB3B022819BC3007C438A /* CNLoginCSRF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3AF22819BC3007C438A /* CNLoginCSRF.swift */; };
 		464FB3B22282666B007C438A /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 464FB3B122826665007C438A /* iconfont.ttf */; };
 		464FB3B522826AC2007C438A /* CNTopicComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3B422826AC2007C438A /* CNTopicComment.swift */; };
@@ -53,7 +53,7 @@
 		464FB39D227FF3BA007C438A /* CNCollectionListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollectionListCell.swift; sourceTree = "<group>"; };
 		464FB3A0227FF90D007C438A /* CNSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSetting.swift; sourceTree = "<group>"; };
 		464FB3AA228166B2007C438A /* CNNewTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNewTopic.swift; sourceTree = "<group>"; };
-		464FB3AC22817DF3007C438A /* CNHTMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHTMLParser.swift; sourceTree = "<group>"; };
+		464FB3AC22817DF3007C438A /* CNCSRFTokenService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCSRFTokenService.swift; sourceTree = "<group>"; };
 		464FB3AF22819BC3007C438A /* CNLoginCSRF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNLoginCSRF.swift; sourceTree = "<group>"; };
 		464FB3B122826665007C438A /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		464FB3B422826AC2007C438A /* CNTopicComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTopicComment.swift; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				464FB389227EDD02007C438A /* CNUserService.swift */,
-				464FB3AC22817DF3007C438A /* CNHTMLParser.swift */,
+				464FB3AC22817DF3007C438A /* CNCSRFTokenService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -394,7 +394,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				464FB39C227FEFE3007C438A /* CNRepliesCell.swift in Sources */,
-				464FB3AD22817DF3007C438A /* CNHTMLParser.swift in Sources */,
+				464FB3AD22817DF3007C438A /* CNCSRFTokenService.swift in Sources */,
 				464FB396227FD16F007C438A /* CNCreatedTopics.swift in Sources */,
 				462E2A4222753ADB002A1FE7 /* CNPersonCenterViewController.swift in Sources */,
 				464FB39A227FDD76007C438A /* CNCreatedTopicsCell.swift in Sources */,
