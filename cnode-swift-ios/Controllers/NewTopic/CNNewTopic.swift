@@ -85,6 +85,10 @@ class CNNewTopicViewController: UIViewController {
         
     }
     
+    deinit {
+        print("deinit")
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true);
     }
@@ -120,7 +124,13 @@ class CNNewTopicViewController: UIViewController {
                             {
                                 let controller = CNTopicViewController();
                                 controller.topicId = topicId;
-                                self.navigationController?.pushViewController(controller, animated: true);
+                                if var viewControllers = self.navigationController?.viewControllers {
+                                    viewControllers.removeLast()
+                                    viewControllers.append(controller)
+                                    self.navigationController?.setViewControllers(viewControllers, animated: true);
+                                } else {
+                                    self.navigationController?.pushViewController(controller, animated: true);
+                                }
                             } else {
                                 self.navigationController?.popViewController(animated: true);
                             }
