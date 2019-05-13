@@ -60,5 +60,15 @@ class CNRepliesViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
         }
+        if let loginname = CNUserService.shared.loginname {
+            Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)").responseJSON { [unowned self] (response) in
+                let json = JSON(response.result.value!)
+                if(json["success"].boolValue) {
+                    guard let data = json["data"].dictionary else { return };
+                    self.recent_replies = data["recent_replies"]?.arrayValue;
+                    tableView.reloadData();
+                }
+            }
+        }
     }
 }

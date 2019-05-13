@@ -33,6 +33,7 @@
 		469E389F2276BF3200840E3A /* CNTopicContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E389E2276BF3200840E3A /* CNTopicContentCell.swift */; };
 		469E38A12276CC5C00840E3A /* CNTopicContentWebViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E38A02276CC5C00840E3A /* CNTopicContentWebViewCell.swift */; };
 		7908A2B9564C0F9CB301F77E /* Pods_cnode_swift_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7D6BAE2C371B8085C1ABB77 /* Pods_cnode_swift_ios.framework */; };
+		9F38301E22869099008FD746 /* CNHomeTopicModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F38301D22869099008FD746 /* CNHomeTopicModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +66,7 @@
 		469E389E2276BF3200840E3A /* CNTopicContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTopicContentCell.swift; sourceTree = "<group>"; };
 		469E38A02276CC5C00840E3A /* CNTopicContentWebViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTopicContentWebViewCell.swift; sourceTree = "<group>"; };
 		7A24C410713C34B40C899A8B /* Pods-cnode-swift-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cnode-swift-ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-cnode-swift-ios/Pods-cnode-swift-ios.release.xcconfig"; sourceTree = "<group>"; };
+		9F38301D22869099008FD746 /* CNHomeTopicModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeTopicModel.swift; sourceTree = "<group>"; };
 		C7D6BAE2C371B8085C1ABB77 /* Pods_cnode_swift_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cnode_swift_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2D9ADB5DD4336B42DB767F3 /* Pods-cnode-swift-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cnode-swift-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-cnode-swift-ios/Pods-cnode-swift-ios.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -214,6 +216,7 @@
 				469E38912275733E00840E3A /* CNHomeCollectionCell.swift */,
 				469E389522759B4600840E3A /* CNHomeContentViewController.swift */,
 				469E38972275CE6800840E3A /* CNHomeTableViewCell.swift */,
+				9F38301D22869099008FD746 /* CNHomeTopicModel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -360,7 +363,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-cnode-swift-ios/Pods-cnode-swift-ios-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-cnode-swift-ios/Pods-cnode-swift-ios-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
@@ -383,7 +386,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-cnode-swift-ios/Pods-cnode-swift-ios-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-cnode-swift-ios/Pods-cnode-swift-ios-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -412,6 +415,7 @@
 				464FB3B022819BC3007C438A /* CNLoginCSRF.swift in Sources */,
 				464FB3A1227FF90D007C438A /* CNSetting.swift in Sources */,
 				469E38982275CE6800840E3A /* CNHomeTableViewCell.swift in Sources */,
+				9F38301E22869099008FD746 /* CNHomeTopicModel.swift in Sources */,
 				469E38A12276CC5C00840E3A /* CNTopicContentWebViewCell.swift in Sources */,
 				462E2A402275392F002A1FE7 /* CNDashboardViewController.swift in Sources */,
 				462E2A2D22753582002A1FE7 /* AppDelegate.swift in Sources */,

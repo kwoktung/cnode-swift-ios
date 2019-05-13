@@ -36,8 +36,6 @@ class CNTopicCommentViewController: UIViewController {
             make.height.equalTo(view).multipliedBy(0.3);
         }
         
-        
-        
         let submmit = UIButton();
         submmit.layer.cornerRadius = 5;
         submmit.layer.backgroundColor = UIColor.init(red: 0, green: 127/255, blue: 1, alpha: 1).cgColor;

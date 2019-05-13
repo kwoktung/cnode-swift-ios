@@ -8,16 +8,15 @@
 
 import UIKit
 import Alamofire
-import SwiftyJSON
 import SwiftDate
 
-typealias LoadDataCallback = (JSON) -> Void;
+typealias LoadDataCallback = ([CNHomeTopicModel]) -> Void;
 
 class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var type: String!;
     var limit: Int = 20;
     var page: Int = 0;
-    var dataArr:[JSON] = [];
+    var dataArr:[CNHomeTopicModel] = [];
     var tableView: UITableView!;
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -25,30 +24,26 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "CNHomeTableViewCell") as? CNHomeTableViewCell;
-        if(cell == nil) {
-            cell = CNHomeTableViewCell(style: .default, reuseIdentifier: "CNHomeTableViewCell");
-        }
-        var data = dataArr[indexPath.item];
-        cell?.title.text = data["title"].string;
-        cell?.avator.af_setImage(withURL: URL.init(string: data["author"]["avatar_url"].string!)!);
-        cell?.visitCount.text = "\(data["visit_count"])次浏览";
-        cell?.replyCount.text = "\(data["reply_count"])";
-        if let lastReplyAt = data["last_reply_at"].string,
-            let lastReplyTime = lastReplyAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
-            cell?.lastAnswer.text = "最后回复:\(lastReplyTime)";
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CNHomeTableViewCell", for: indexPath) as! CNHomeTableViewCell;
+        let topic = dataArr[indexPath.item];
+        cell.title.text = topic.title;
+        cell.avator.af_setImage(withURL: URL.init(string: topic.author.avatarUrl)!);
+        cell.visitCount.text = "\(topic.visitCount)次浏览";
+        cell.replyCount.text = "\(topic.replyCount)";
+        if let lastReplyTime = topic.lastReplyAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
+            cell.lastAnswer.text = "最后回复:\(lastReplyTime)";
         }
         if(indexPath.item == dataArr.count - 1) {
             self.loadMoreData();
         }
-        return cell!;
+        return cell;
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true);
         let topic = dataArr[indexPath.item];
         let controller = CNTopicViewController();
-        controller.topicId = topic["id"].stringValue;
+        controller.topicId = topic.id;
         self.parent?.navigationController?.pushViewController(controller, animated: true);
     }
     
@@ -66,9 +61,9 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
                 .validate()
                 .responseJSON {(response) in
                     switch response.result {
-                    case .success(let value):
-                        let json = JSON(value);
-                        DispatchQueue.main.async { callback(json);}
+                    case .success(_):
+                        guard let res = try? JSONDecoder().decode(CNHomeTopicResponse.self, from: response.data!) else { return }
+                        DispatchQueue.main.async { callback(res.topicArr);}
                     case .failure(_):
                         ()
                     }
@@ -78,9 +73,8 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
     
     func loadMoreData() {
         self.page += 1
-        self.loadData { (json) in
-            let dataArr = json["data"].arrayValue;
-            self.dataArr.append(contentsOf: dataArr);
+        self.loadData { (topicArr) in
+            self.dataArr.append(contentsOf: topicArr);
             self.tableView.reloadData();
         }
     }
@@ -88,8 +82,8 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad();
         self.view.backgroundColor = UIColor.white;
-        self.loadData {[unowned self] (json) in
-            self.dataArr = json["data"].arrayValue;
+        self.loadData {[unowned self] (topicArr) in
+            self.dataArr = topicArr
             self.tableView = UITableView();
             self.tableView.dataSource = self;
             self.tableView.delegate = self;
