@@ -13,7 +13,11 @@ import SwiftSoup
 
 class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var recent_topics:[CNPersonCenterTopic] = [];
-    var tableView = UITableView();
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        self.navigationItem.title = "最近主题"
+    }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction.init(style: .destructive, title: "删除") { (action: UIContextualAction, view: UIView, completionHandler: @escaping (Bool)->Void) in
@@ -51,26 +55,10 @@ class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITa
         self.navigationController?.pushViewController(controller, animated: true);
     }
     
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated);
-        self.navigationItem.title = "我的主题"
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad();
         self.view.backgroundColor = UIColor.white;
-        
-        tableView.dataSource = self;
-        tableView.delegate = self;
-        tableView.rowHeight = 60;
-        tableView.tableFooterView = UIView();
-        tableView.register(CNCreatedTopicsCell.self, forCellReuseIdentifier: "CNCreatedTopicsCell");
-        
-        self.view.addSubview(tableView);
-        tableView.snp.makeConstraints { (make) in
-            make.edges.equalTo(self.view);
-        }
+
         if let loginname = CNUserService.shared.loginname {
             Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)")
                 .responseJSON { [unowned self] (response) in
@@ -79,10 +67,31 @@ class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITa
                         let decoder = JSONDecoder();
                         decoder.dateDecodingStrategy = .iso8601;
                         decoder.keyDecodingStrategy = .convertFromSnakeCase;
-                        guard let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!), res.success == true else { return }
-                        let model = res.data;
-                        self.recent_topics = model.recentTopics
-                        self.tableView.reloadData();
+                        guard
+                            let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!),
+                            res.success == true else { return }
+                        self.recent_topics = res.data.recentTopics
+                        if(res.data.recentTopics.count > 0) {
+                            let tableView = UITableView();
+                            self.view.addSubview(tableView);
+                            tableView.dataSource = self;
+                            tableView.delegate = self;
+                            tableView.rowHeight = 60;
+                            tableView.tableFooterView = UIView();
+                            tableView.register(CNCreatedTopicsCell.self, forCellReuseIdentifier: "CNCreatedTopicsCell");
+                            tableView.snp.makeConstraints { (make) in
+                                make.edges.equalTo(self.view);
+                            }
+                            tableView.reloadData();
+                        } else  {
+                            let label = UILabel();
+                            self.view.addSubview(label);
+                            label.text = "你没有创建过主题"
+                            label.snp.makeConstraints({ (make) in
+                                make.center.equalTo(self.view);
+                            })
+                        }
+                        
                     case .failure(_):
                         ()
                     }

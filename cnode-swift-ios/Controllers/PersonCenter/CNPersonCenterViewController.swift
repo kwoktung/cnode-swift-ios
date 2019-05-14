@@ -11,8 +11,8 @@ import Alamofire
 import SwiftDate
 
 let dataArr = [
-    [ "text": "我的主题", "value": 0 ],
-    [ "text": "我的评论", "value": 1 ],
+    [ "text": "最近主题", "value": 0 ],
+    [ "text": "最近评论", "value": 1 ],
     [ "text": "我的收藏", "value": 2 ],
     [ "text": "设置", "value": 3 ]];
 
