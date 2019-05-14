@@ -8,7 +8,13 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
+
+struct CNUserServiceModel: Decodable {
+    let success: Bool
+    let loginname: String
+    let id: String
+    let avatarUrl: String
+}
 
 typealias completeHandler = () -> Void
 
@@ -52,13 +58,18 @@ class CNUserService {
             method: .post,
             parameters: ["accesstoken": accesstoken])
             .responseJSON(completionHandler: { (response) in
-                let json = JSON(response.result.value!);
-                if (json["success"].boolValue){
-                    UserDefaults.standard.set(json["loginname"].string, forKey: "loginname");
-                    UserDefaults.standard.set(json["id"].string, forKey: "id");
-                    UserDefaults.standard.set(json["avatar_url"].string, forKey: "avatar_url");
+                switch response.result {
+                case .success(_):
+                    let decoder = JSONDecoder();
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase;
+                    guard let res = try? decoder.decode(CNUserServiceModel.self, from: response.data!) else { return }
+                    UserDefaults.standard.set(res.loginname, forKey: "loginname");
+                    UserDefaults.standard.set(res.id, forKey: "id");
+                    UserDefaults.standard.set(res.avatarUrl, forKey: "avatar_url");
                     UserDefaults.standard.set(accesstoken, forKey: "accesstoken");
                     handler?();
+                case .failure(_):
+                    ()
                 }
             });
     }

@@ -8,7 +8,6 @@
 
 import UIKit
 import Alamofire
-import SwiftyJSON
 import AlamofireImage
 import SwiftDate
 import WebKit
@@ -20,16 +19,16 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
     let isCollect = UIButton();
     
     var topicId: String!;
-    var topic: JSON!;
-    var replyArr:[JSON] = [];
+    var topic: CNTopicModel!;
+    var replyArr:[CNTopicReply] = [];
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         var actions: [UIContextualAction] = [];
         if (!CNUserService.shared.isLogin) { return UISwipeActionsConfiguration.init(actions: actions); }
         if (indexPath.section == 1) {
             let reply = replyArr[indexPath.item];
-            let replyId = reply["id"].stringValue;
-            let username = reply["author"]["loginname"].stringValue;
+            let replyId = reply.id
+            let username = reply.author.loginname
             if(username == CNUserService.shared.loginname) {
                 let action = UIContextualAction.init(style: .destructive, title: "删除") { (_ UIContextualAction, _ UIView, handler: @escaping (Bool) -> Void) in
                     self.onDeleteReply(replyId, with: handler);
@@ -56,7 +55,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if(indexPath.section == 0 && indexPath.item == 1) {
-            return heightCache[topic["id"].stringValue] ?? UITableView.automaticDimension;
+            return heightCache[topic.id] ?? UITableView.automaticDimension;
         }
         return UITableView.automaticDimension;
     }
@@ -69,11 +68,10 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
                     headerCell = CNTopicContentCell.init(style: .default, reuseIdentifier: "CNTopicContentCell");
                 }
                 if let content = self.topic {
-                    headerCell?.authorName.text = content["author"]["loginname"].string;
-                    headerCell?.headingTitile.text = content["title"].string;
-                    headerCell?.avator.af_setImage(withURL: URL.init(string: content["author"]["avatar_url"].string!)!)
-                    if let createdAt = content["create_at"].string,
-                        let createdAtTime = createdAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
+                    headerCell?.authorName.text = content.author.loginname;
+                    headerCell?.headingTitile.text = content.title;
+                    headerCell?.avator.af_setImage(withURL: URL.init(string: content.author.avatarUrl)!)
+                    if let createdAtTime = content.createAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
                         headerCell?.createdAt.text = "创建于\(createdAtTime)";
                     }
                 }
@@ -96,13 +94,13 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
                       <link rel="stylesheet" href="https://raw.githubusercontent.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css">
                     </head>
                     <body>
-                      <div class="markdown-body">\(topic["content"].string!)</div>
+                      <div class="markdown-body">\(topic.content)</div>
                     </body>
                     </html>
                     """;
                     webviewCell?.webView.loadHTMLString(html, baseURL: nil);
                     webviewCell?.refresh = {(_ height: CGFloat) -> () in
-                        heightCache[topic["id"].stringValue] = height;
+                        heightCache[topic.id] = height;
                         self.tableView.reloadRows(at: [indexPath], with: .none);
                     };
                 }
@@ -115,18 +113,17 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
                 cell = CNTopicReplyCell.init(style: .default, reuseIdentifier: "CNTopicReplyCell");
             }
             let replyItem = replyArr[indexPath.item]
-            cell?.authorName.text = replyItem["author"]["loginname"].string;
-            cell?.avator.af_setImage(withURL: URL.init(string: replyItem["author"]["avatar_url"].string!)!);
-            cell?.replyContent.text = replyItem["content"].string;
-            if let replyAt = replyItem["create_at"].string,
-                let _replyAt = replyAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
+            cell?.authorName.text = replyItem.author.loginname;
+            cell?.avator.af_setImage(withURL: URL.init(string: replyItem.author.avatarUrl)!);
+            cell?.replyContent.text = replyItem.content;
+            if let _replyAt = replyItem.createAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
                 cell?.replyAt.text = "\(_replyAt)";
             }
             return cell!
         }
     }
     
-    func loadData(_ mdrender: String, with callback: @escaping (JSON) -> Void) {
+    func loadData(_ mdrender: String, with callback: @escaping (CNTopicModel) -> Void) {
         var parameters: Dictionary = ["mdrender": mdrender]
         if(CNUserService.shared.isLogin) {
             parameters["accesstoken"] = CNUserService.shared.accesstoken
@@ -136,8 +133,11 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
             parameters: parameters)
             .responseJSON { (response) in
                 switch response.result {
-                case .success(let value):
-                    callback(JSON(value)["data"])
+                case .success(_):
+                    let decoder = JSONDecoder();
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase;
+                    guard let res = try? decoder.decode(CNTopicModelResponse.self, from: response.data!), res.success == true else { return }
+                    callback(res.data)
                 case .failure(_):
                     self.navigationController?.popViewController(animated: true);
                 }
@@ -181,7 +181,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
             isCollect.titleLabel?.font = UIFont.init(name: "iconfont", size: 50);
             isCollect.layer.cornerRadius = 30;
             isCollect.layer.masksToBounds = true;
-            if(topic["is_collect"].boolValue) {
+            if(topic.isCollect) {
                 isCollect.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
             } else {
                 isCollect.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
@@ -202,15 +202,15 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         let group = DispatchGroup.init();
         group.enter()
         DispatchQueue.global().async(group: group, qos: .default, flags: .inheritQoS) {
-            self.loadData("false", with: { (json) in
-                self.replyArr = json["replies"].arrayValue;
+            self.loadData("false", with: { (topic) in
+                self.replyArr = topic.replies
                 group.leave();
             })
         }
         group.enter();
         DispatchQueue.global().async(group: group, qos: .default, flags: .inheritQoS) {
-            self.loadData("true", with: { (json) in
-                self.topic = json;
+            self.loadData("true", with: { (topic) in
+                self.topic = topic;
                 group.leave();
             })
         }
@@ -249,9 +249,9 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
     @objc
     func onTopicNeedUpdateReplies() {
         DispatchQueue.global().async {
-            self.loadData("false", with: { (json) in
+            self.loadData("false", with: { (topic) in
                 let len = self.replyArr.count;
-                self.replyArr = json["replies"].arrayValue;
+                self.replyArr = topic.replies
                 DispatchQueue.main.async {
                     if (len == 0) {
                         self.tableView.reloadData();
@@ -264,14 +264,14 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @objc func onCollect() {
-        if(topic["is_collect"].boolValue) {
+        if(topic.isCollect) {
             self.topicDecollect {
-                self.topic["is_collect"] = JSON(false);
+                self.topic.isCollect = false;
                 self.isCollect.setTitleColor(UIColor.init(red: 152/255, green: 152/255, blue: 152/255, alpha: 1), for: .normal);
             }
         } else {
             self.topicCollect {
-                self.topic["is_collect"] = JSON(true);
+                self.topic.isCollect = true
                 self.isCollect.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
             }
         }
@@ -289,7 +289,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
             Alamofire.request(
                 "https://cnodejs.org/api/v1/topic_collect/collect",
                 method: .post,
-                parameters: ["accesstoken": accesstoken, "topic_id": topic["id"].stringValue]
+                parameters: ["accesstoken": accesstoken, "topic_id": topic.id]
                 )
                 .validate()
                 .responseJSON { (make) in
@@ -303,7 +303,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
             Alamofire.request(
                 "https://cnodejs.org/api/v1/topic_collect/de_collect",
                 method: .post,
-                parameters: ["accesstoken": accesstoken, "topic_id": topic["id"].stringValue]
+                parameters: ["accesstoken": accesstoken, "topic_id": topic.id]
                 )
                 .validate()
                 .responseJSON { (make) in

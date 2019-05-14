@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CNRepliesCell: UITableViewCell {
+class CNParticipatedRepliesCell: UITableViewCell {
     let title = UILabel();
     let avator = UIImageView();
     let lastAnswer = UILabel();

@@ -6,9 +6,8 @@ target 'cnode-swift-ios' do
   use_frameworks!
   pod 'SnapKit'
   pod 'Alamofire'
-  pod 'SwiftyJSON', '~> 4.0'
-  pod 'AlamofireImage', '~> 3.5'
-  pod 'SwiftDate', '~> 5.0'
+  pod 'AlamofireImage'
+  pod 'SwiftDate'
   pod 'SwiftSoup'
   pod 'SVProgressHUD'
   # Pods for cnode-swift-ios

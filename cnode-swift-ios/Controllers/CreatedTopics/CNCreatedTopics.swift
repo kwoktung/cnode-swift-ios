@@ -7,38 +7,35 @@
 //
 
 import UIKit
-import SwiftyJSON
 import SwiftDate
 import Alamofire
 import SwiftSoup
 
 class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var recent_topics:[JSON]?;
+    var recent_topics:[CNPersonCenterTopic] = [];
     var tableView = UITableView();
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction.init(style: .destructive, title: "删除") { (action: UIContextualAction, view: UIView, completionHandler: @escaping (Bool)->Void) in
-            guard let topic = self.recent_topics?[indexPath.item]["id"].string else { completionHandler(false); return }
-            self.onTopicDelete(topic, with: completionHandler);
+            let topicId = self.recent_topics[indexPath.item].id
+            self.onTopicDelete(topicId, with: completionHandler);
         }
         let config = UISwipeActionsConfiguration.init(actions: [action]);
         return config;
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recent_topics?.count ?? 0;
+        return recent_topics.count;
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CNCreatedTopicsCell", for: indexPath) as! CNCreatedTopicsCell;
-        if let data = self.recent_topics?[indexPath.item] {
-            cell.title.text = data["title"].stringValue
-            if let lastReplyAt = data["last_reply_at"].string,
-                let lastReplyTime = lastReplyAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
-                cell.lastAnswer.text = "最后回复:\(lastReplyTime)";
-            }
-            cell.avator.af_setImage(withURL: URL.init(string: data["author"]["avatar_url"].stringValue)!)
+        let data = self.recent_topics[indexPath.item]
+        cell.title.text = data.title
+        if let lastReplyTime = data.lastReplyAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
+            cell.lastAnswer.text = "最后回复:\(lastReplyTime)";
         }
+        cell.avator.af_setImage(withURL: URL.init(string: data.author.avatarUrl)!)
         return cell;
     }
     
@@ -48,11 +45,10 @@ class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITa
         if(CNUserService.shared.isLogin) {
             parameters["accesstoken"] = CNUserService.shared.accesstoken
         }
-        if let topic = recent_topics?[indexPath.item] {
-            let controller = CNTopicViewController()
-            controller.topicId = topic["id"].stringValue;
-            self.navigationController?.pushViewController(controller, animated: true);
-        }
+        let topic = recent_topics[indexPath.item]
+        let controller = CNTopicViewController()
+        controller.topicId = topic.id;
+        self.navigationController?.pushViewController(controller, animated: true);
     }
     
     
@@ -76,14 +72,20 @@ class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITa
             make.edges.equalTo(self.view);
         }
         if let loginname = CNUserService.shared.loginname {
-            Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)").responseJSON { (response) in
-                let json = JSON(response.result.value!)
-                if(json["success"].boolValue) {
-                    if let data = json["data"].dictionary {
-                        self.recent_topics = data["recent_topics"]?.arrayValue;
+            Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)")
+                .responseJSON { [unowned self] (response) in
+                    switch response.result {
+                    case .success(_):
+                        let decoder = JSONDecoder();
+                        decoder.dateDecodingStrategy = .iso8601;
+                        decoder.keyDecodingStrategy = .convertFromSnakeCase;
+                        guard let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!), res.success == true else { return }
+                        let model = res.data;
+                        self.recent_topics = model.recentTopics
                         self.tableView.reloadData();
+                    case .failure(_):
+                        ()
                     }
-                }
             }
         }
     }

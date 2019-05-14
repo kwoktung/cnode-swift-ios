@@ -8,7 +8,6 @@
 
 import UIKit
 import Alamofire
-import SwiftyJSON
 import SwiftDate
 
 let dataArr = [
@@ -18,8 +17,8 @@ let dataArr = [
     [ "text": "设置", "value": 3 ]];
 
 class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    var recent_topics:[JSON]? = [];
-    var recent_replies:[JSON]? = [];
+    var recent_topics:[CNPersonCenterTopic] = [];
+    var recent_replies:[CNPersonCenterTopic] = [];
     
     let username = UILabel();
     let datetime = UILabel();
@@ -50,7 +49,7 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
             controller.recent_topics = self.recent_topics;
             self.navigationController?.pushViewController(controller, animated: true);
         case 1:
-            let controller = CNRepliesViewController();
+            let controller = CNParticipatedRepliesViewController();
             controller.recent_replies = self.recent_replies;
             self.navigationController?.pushViewController(controller, animated: true);
         case 2:
@@ -136,24 +135,27 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
     @objc
     func loadData() {
         if let loginname = CNUserService.shared.loginname {
-            Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)").responseJSON { (response) in
-                let json = JSON(response.result.value!)
-                if(json["success"].boolValue) {
-                    guard let data = json["data"].dictionary,
-                        let avatar_url = data["avatar_url"]?.string,
-                        let create_at = data["create_at"]?.string
-                        else { return };
-                    
-                    self.recent_topics = data["recent_topics"]?.arrayValue;
-                    self.recent_replies = data["recent_replies"]?.arrayValue;
-                    
-                    self.username.text = loginname;
-                    self.avator.af_setImage(withURL: URL.init(string: avatar_url)!);
-                    if let createAtTime = create_at.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese)
+            Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)")
+                .responseJSON { [unowned self] (response) in
+                    switch response.result{
+                    case .success(_):
+                        let decoder = JSONDecoder();
+                        decoder.dateDecodingStrategy = .iso8601;
+                        decoder.keyDecodingStrategy = .convertFromSnakeCase;
+                        guard let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!), res.success == true else { return }
+                        let model = res.data;
+                        self.username.text = model.loginname;
+                        self.avator.af_setImage(withURL: URL.init(string: model.avatarUrl)!)
+                        if let createAtTime = model.createAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese)
                         {
-                        self.datetime.text = "\(createAtTime)加入社区"
+                            self.datetime.text = "\(createAtTime)加入社区"
+                        }
+                        self.recent_topics = model.recentTopics
+                        self.recent_replies = model.recentReplies
+                       
+                    case .failure(_):
+                        ()
                     }
-                }
             }
         } else {
             self.username.text = "匿名";

@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import SwiftyJSON
 import SwiftDate
 import Alamofire
 
 class CNCollectionListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var topicArr: [JSON]?;
+    var topicArr: [CNCollectionListModel]?;
     var tableView:UITableView?;
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -22,14 +21,13 @@ class CNCollectionListViewController: UIViewController, UITableViewDelegate, UIT
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CNCollectionListCell", for: indexPath) as! CNCollectionListCell;
         if let data = topicArr?[indexPath.item] {
-            cell.title.text = data["title"].stringValue
-            if let lastReplyAt = data["last_reply_at"].string,
-                let lastReplyTime = lastReplyAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
+            cell.title.text = data.title
+            if let lastReplyTime = data.lastReplyAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
                 cell.lastAnswer.text = "最后回复:\(lastReplyTime)";
             }
-            cell.visitCount.text = "\(data["visit_count"])次浏览";
-            cell.replyCount.text = "\(data["reply_count"])";
-            cell.avator.af_setImage(withURL: URL.init(string: data["author"]["avatar_url"].stringValue)!)
+            cell.visitCount.text = "\(data.visitCount)次浏览";
+            cell.replyCount.text = "\(data.replyCount)";
+            cell.avator.af_setImage(withURL: URL.init(string: data.author.avatarUrl)!)
         }
         return cell;
     }
@@ -38,7 +36,7 @@ class CNCollectionListViewController: UIViewController, UITableViewDelegate, UIT
         tableView.deselectRow(at: indexPath, animated: false);
         if let topic = topicArr?[indexPath.item] {
             let controller = CNTopicViewController()
-            controller.topicId = topic["id"].stringValue;
+            controller.topicId = topic.id
             self.navigationController?.pushViewController(controller, animated: true);
         }
     }
@@ -68,17 +66,22 @@ class CNCollectionListViewController: UIViewController, UITableViewDelegate, UIT
         }
     }
     
-    func refresh(_ handler: (([JSON]) -> Void)?) {
+    func refresh(_ handler: (([CNCollectionListModel]) -> Void)?) {
         DispatchQueue.global().async {
             Alamofire.request(
                 "https://cnodejs.org/api/v1/topic_collect/\(CNUserService.shared.loginname!)")
                 .validate()
                 .responseJSON { (response) in
-                    let json = JSON(response.result.value!);
-                    if(json["success"].boolValue) {
+                    switch response.result {
+                    case .success(_):
+                        let decoder = JSONDecoder();
+                        decoder.keyDecodingStrategy = .convertFromSnakeCase;
+                        guard let res = try? decoder.decode(CNCollectionListResponse.self, from: response.data!) else { return }
                         DispatchQueue.main.async {
-                            handler?(json["data"].arrayValue);
+                            handler?(res.data);
                         }
+                    case .failure(_):
+                        ()
                     }
             }
         }

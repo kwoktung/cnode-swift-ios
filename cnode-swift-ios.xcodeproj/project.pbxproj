@@ -13,11 +13,11 @@
 		462E2A4422753AEB002A1FE7 /* CNHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E2A4322753AEB002A1FE7 /* CNHomeViewController.swift */; };
 		462E2A4622754206002A1FE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 462E2A4522754206002A1FE7 /* Assets.xcassets */; };
 		464FB38A227EDD02007C438A /* CNUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB389227EDD02007C438A /* CNUserService.swift */; };
-		464FB390227FCC95007C438A /* CNReplies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB38F227FCC95007C438A /* CNReplies.swift */; };
+		464FB390227FCC95007C438A /* CNParticipatedReplies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB38F227FCC95007C438A /* CNParticipatedReplies.swift */; };
 		464FB393227FCD32007C438A /* CNCollectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB392227FCD32007C438A /* CNCollectionList.swift */; };
 		464FB396227FD16F007C438A /* CNCreatedTopics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB395227FD16F007C438A /* CNCreatedTopics.swift */; };
 		464FB39A227FDD76007C438A /* CNCreatedTopicsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB399227FDD75007C438A /* CNCreatedTopicsCell.swift */; };
-		464FB39C227FEFE3007C438A /* CNRepliesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB39B227FEFE3007C438A /* CNRepliesCell.swift */; };
+		464FB39C227FEFE3007C438A /* CNParticipatedRepliesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB39B227FEFE3007C438A /* CNParticipatedRepliesCell.swift */; };
 		464FB39E227FF3BA007C438A /* CNCollectionListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB39D227FF3BA007C438A /* CNCollectionListCell.swift */; };
 		464FB3A1227FF90D007C438A /* CNSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3A0227FF90D007C438A /* CNSetting.swift */; };
 		464FB3AB228166B2007C438A /* CNNewTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3AA228166B2007C438A /* CNNewTopic.swift */; };
@@ -33,6 +33,9 @@
 		469E389F2276BF3200840E3A /* CNTopicContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E389E2276BF3200840E3A /* CNTopicContentCell.swift */; };
 		469E38A12276CC5C00840E3A /* CNTopicContentWebViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E38A02276CC5C00840E3A /* CNTopicContentWebViewCell.swift */; };
 		7908A2B9564C0F9CB301F77E /* Pods_cnode_swift_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7D6BAE2C371B8085C1ABB77 /* Pods_cnode_swift_ios.framework */; };
+		9F0EA171228A4D0000C59F7E /* CNPersonCenterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0EA170228A4D0000C59F7E /* CNPersonCenterModel.swift */; };
+		9F0EA173228A5F2100C59F7E /* CNTopicModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0EA172228A5F2100C59F7E /* CNTopicModel.swift */; };
+		9F0EA175228A664B00C59F7E /* CNCollectionListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0EA174228A664B00C59F7E /* CNCollectionListModel.swift */; };
 		9F38301E22869099008FD746 /* CNHomeTopicModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F38301D22869099008FD746 /* CNHomeTopicModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,11 +49,11 @@
 		462E2A4322753AEB002A1FE7 /* CNHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeViewController.swift; sourceTree = "<group>"; };
 		462E2A4522754206002A1FE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		464FB389227EDD02007C438A /* CNUserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNUserService.swift; sourceTree = "<group>"; };
-		464FB38F227FCC95007C438A /* CNReplies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNReplies.swift; sourceTree = "<group>"; };
+		464FB38F227FCC95007C438A /* CNParticipatedReplies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNParticipatedReplies.swift; sourceTree = "<group>"; };
 		464FB392227FCD32007C438A /* CNCollectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollectionList.swift; sourceTree = "<group>"; };
 		464FB395227FD16F007C438A /* CNCreatedTopics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCreatedTopics.swift; sourceTree = "<group>"; };
 		464FB399227FDD75007C438A /* CNCreatedTopicsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCreatedTopicsCell.swift; sourceTree = "<group>"; };
-		464FB39B227FEFE3007C438A /* CNRepliesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRepliesCell.swift; sourceTree = "<group>"; };
+		464FB39B227FEFE3007C438A /* CNParticipatedRepliesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNParticipatedRepliesCell.swift; sourceTree = "<group>"; };
 		464FB39D227FF3BA007C438A /* CNCollectionListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollectionListCell.swift; sourceTree = "<group>"; };
 		464FB3A0227FF90D007C438A /* CNSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSetting.swift; sourceTree = "<group>"; };
 		464FB3AA228166B2007C438A /* CNNewTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNewTopic.swift; sourceTree = "<group>"; };
@@ -66,6 +69,9 @@
 		469E389E2276BF3200840E3A /* CNTopicContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTopicContentCell.swift; sourceTree = "<group>"; };
 		469E38A02276CC5C00840E3A /* CNTopicContentWebViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTopicContentWebViewCell.swift; sourceTree = "<group>"; };
 		7A24C410713C34B40C899A8B /* Pods-cnode-swift-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cnode-swift-ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-cnode-swift-ios/Pods-cnode-swift-ios.release.xcconfig"; sourceTree = "<group>"; };
+		9F0EA170228A4D0000C59F7E /* CNPersonCenterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPersonCenterModel.swift; sourceTree = "<group>"; };
+		9F0EA172228A5F2100C59F7E /* CNTopicModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTopicModel.swift; sourceTree = "<group>"; };
+		9F0EA174228A664B00C59F7E /* CNCollectionListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollectionListModel.swift; sourceTree = "<group>"; };
 		9F38301D22869099008FD746 /* CNHomeTopicModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeTopicModel.swift; sourceTree = "<group>"; };
 		C7D6BAE2C371B8085C1ABB77 /* Pods_cnode_swift_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cnode_swift_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2D9ADB5DD4336B42DB767F3 /* Pods-cnode-swift-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cnode-swift-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-cnode-swift-ios/Pods-cnode-swift-ios.debug.xcconfig"; sourceTree = "<group>"; };
@@ -124,7 +130,7 @@
 				464FB39F227FF8F6007C438A /* Setting */,
 				464FB394227FD142007C438A /* CreatedTopics */,
 				464FB391227FCD20007C438A /* CollectionList */,
-				464FB38E227FCC69007C438A /* Replies */,
+				464FB38E227FCC69007C438A /* ParticipatedReplies */,
 				469E3899227683F600840E3A /* Topic */,
 				469E38942275798E00840E3A /* PersonCenter */,
 				469E38902275730300840E3A /* Home */,
@@ -142,13 +148,13 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
-		464FB38E227FCC69007C438A /* Replies */ = {
+		464FB38E227FCC69007C438A /* ParticipatedReplies */ = {
 			isa = PBXGroup;
 			children = (
-				464FB38F227FCC95007C438A /* CNReplies.swift */,
-				464FB39B227FEFE3007C438A /* CNRepliesCell.swift */,
+				464FB38F227FCC95007C438A /* CNParticipatedReplies.swift */,
+				464FB39B227FEFE3007C438A /* CNParticipatedRepliesCell.swift */,
 			);
-			path = Replies;
+			path = ParticipatedReplies;
 			sourceTree = "<group>";
 		};
 		464FB391227FCD20007C438A /* CollectionList */ = {
@@ -156,6 +162,7 @@
 			children = (
 				464FB392227FCD32007C438A /* CNCollectionList.swift */,
 				464FB39D227FF3BA007C438A /* CNCollectionListCell.swift */,
+				9F0EA174228A664B00C59F7E /* CNCollectionListModel.swift */,
 			);
 			path = CollectionList;
 			sourceTree = "<group>";
@@ -233,6 +240,7 @@
 			isa = PBXGroup;
 			children = (
 				462E2A4122753ADB002A1FE7 /* CNPersonCenterViewController.swift */,
+				9F0EA170228A4D0000C59F7E /* CNPersonCenterModel.swift */,
 			);
 			path = PersonCenter;
 			sourceTree = "<group>";
@@ -244,6 +252,7 @@
 				469E389C2276A03100840E3A /* CNTopicReplyCell.swift */,
 				469E389E2276BF3200840E3A /* CNTopicContentCell.swift */,
 				469E38A02276CC5C00840E3A /* CNTopicContentWebViewCell.swift */,
+				9F0EA172228A5F2100C59F7E /* CNTopicModel.swift */,
 			);
 			path = Topic;
 			sourceTree = "<group>";
@@ -370,7 +379,6 @@
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftDate/SwiftDate.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
@@ -382,7 +390,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftDate.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -396,8 +403,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				464FB39C227FEFE3007C438A /* CNRepliesCell.swift in Sources */,
+				464FB39C227FEFE3007C438A /* CNParticipatedRepliesCell.swift in Sources */,
 				464FB3AD22817DF3007C438A /* CNCSRFTokenService.swift in Sources */,
+				9F0EA171228A4D0000C59F7E /* CNPersonCenterModel.swift in Sources */,
 				464FB396227FD16F007C438A /* CNCreatedTopics.swift in Sources */,
 				462E2A4222753ADB002A1FE7 /* CNPersonCenterViewController.swift in Sources */,
 				464FB39A227FDD76007C438A /* CNCreatedTopicsCell.swift in Sources */,
@@ -409,13 +417,15 @@
 				469E389F2276BF3200840E3A /* CNTopicContentCell.swift in Sources */,
 				464FB3AB228166B2007C438A /* CNNewTopic.swift in Sources */,
 				464FB38A227EDD02007C438A /* CNUserService.swift in Sources */,
-				464FB390227FCC95007C438A /* CNReplies.swift in Sources */,
+				9F0EA173228A5F2100C59F7E /* CNTopicModel.swift in Sources */,
+				464FB390227FCC95007C438A /* CNParticipatedReplies.swift in Sources */,
 				462E2A4422753AEB002A1FE7 /* CNHomeViewController.swift in Sources */,
 				464FB393227FCD32007C438A /* CNCollectionList.swift in Sources */,
 				464FB3B022819BC3007C438A /* CNLoginCSRF.swift in Sources */,
 				464FB3A1227FF90D007C438A /* CNSetting.swift in Sources */,
 				469E38982275CE6800840E3A /* CNHomeTableViewCell.swift in Sources */,
 				9F38301E22869099008FD746 /* CNHomeTopicModel.swift in Sources */,
+				9F0EA175228A664B00C59F7E /* CNCollectionListModel.swift in Sources */,
 				469E38A12276CC5C00840E3A /* CNTopicContentWebViewCell.swift in Sources */,
 				462E2A402275392F002A1FE7 /* CNDashboardViewController.swift in Sources */,
 				462E2A2D22753582002A1FE7 /* AppDelegate.swift in Sources */,
