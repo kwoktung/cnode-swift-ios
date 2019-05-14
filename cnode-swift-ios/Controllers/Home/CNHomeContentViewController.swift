@@ -79,12 +79,24 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+    @objc
+    func pullRefresh() {
+        self.page = 1;
+        self.loadData { (topicArr) in
+            self.dataArr = topicArr;
+            self.tableView.reloadData();
+            self.tableView.refreshControl?.endRefreshing();
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad();
         self.view.backgroundColor = UIColor.white;
         self.loadData {[unowned self] (topicArr) in
             self.dataArr = topicArr
             self.tableView = UITableView();
+            self.tableView.refreshControl = UIRefreshControl();
+            self.tableView.refreshControl?.addTarget(self, action: #selector(self.pullRefresh), for: .valueChanged)
             self.tableView.dataSource = self;
             self.tableView.delegate = self;
             self.tableView.register(CNHomeTableViewCell.self, forCellReuseIdentifier: "CNHomeTableViewCell");

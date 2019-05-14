@@ -11,6 +11,7 @@ import Alamofire
 import AlamofireImage
 import SwiftDate
 import WebKit
+import SVProgressHUD
 
 private var heightCache:[String: CGFloat] = [:];
 
@@ -21,6 +22,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
     var topicId: String!;
     var topic: CNTopicModel!;
     var replyArr:[CNTopicReply] = [];
+    var error: Error?
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         var actions: [UIContextualAction] = [];
@@ -131,15 +133,20 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         Alamofire.request(
             "https://cnodejs.org/api/v1/topic/\(self.topicId!)",
             parameters: parameters)
-            .responseJSON { (response) in
+            .validate()
+            .responseJSON { [unowned self](response) in
                 switch response.result {
                 case .success(_):
                     let decoder = JSONDecoder();
                     decoder.keyDecodingStrategy = .convertFromSnakeCase;
                     guard let res = try? decoder.decode(CNTopicModelResponse.self, from: response.data!), res.success == true else { return }
                     callback(res.data)
-                case .failure(_):
-                    self.navigationController?.popViewController(animated: true);
+                case .failure(let error):
+                    if(self.error == nil) {
+                        self.error = error;
+                        SVProgressHUD.showInfo(withStatus: "文章不存在");
+                        self.navigationController?.popViewController(animated: true);
+                    }
                 }
         }
     }
