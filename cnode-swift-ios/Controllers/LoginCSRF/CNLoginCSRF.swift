@@ -122,17 +122,23 @@ class CNLoginCSRFViewController: UIViewController {
                                     "Origin": "https://cnodejs.org",
                                     "Referer": "https://cnodejs.org/signin"
                                 ])
-                                .responseJSON(completionHandler: { (response) in
-                                    Alamofire.request("https://cnodejs.org/setting").responseString(completionHandler: { (response) in
-                                        if let doc: Document = try? SwiftSoup.parse(response.result.value!),
-                                            let element: Element = try! doc.select("#accessToken").first(),
-                                            let accesstoken = try? element.text() {
-                                            CNUserService.shared.login(accesstoken, with: {
-                                                NotificationCenter.default.post(name: Notification.Name.init("UserLoginStatusChanged"), object: nil);
-                                                self.navigationController?.popViewController(animated: true);
-                                            })
-                                        }
-                                    })
+                                .validate()
+                                .responseString(completionHandler: { (response) in
+                                    switch response.result {
+                                    case .success(_):
+                                        Alamofire.request("https://cnodejs.org/setting").responseString(completionHandler: { (response) in
+                                            if let doc: Document = try? SwiftSoup.parse(response.result.value!),
+                                                let element: Element = try! doc.select("#accessToken").first(),
+                                                let accesstoken = try? element.text() {
+                                                CNUserService.shared.login(accesstoken, with: {
+                                                    NotificationCenter.default.post(name: Notification.Name.init("UserLoginStatusChanged"), object: nil);
+                                                    self.navigationController?.popViewController(animated: true);
+                                                })
+                                            }
+                                        })
+                                    case .failure(_):
+                                        SVProgressHUD.showError(withStatus: "登陆失败");
+                                    };
                             })
                         }
                     })

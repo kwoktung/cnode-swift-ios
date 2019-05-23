@@ -134,7 +134,7 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
     
     @objc
     func loadData() {
-        if let loginname = CNUserService.shared.loginname {
+        if let loginname = CNUserService.shared.loginname, CNUserService.shared.isLogin == true {
             Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)")
                 .responseJSON { [unowned self] (response) in
                     switch response.result{
