@@ -103,18 +103,20 @@ class CNHomeViewController: UIViewController, UICollectionViewDelegate, UICollec
         cellectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredHorizontally)
         self.collectionView(cellectionView, didSelectItemAt: IndexPath(item: 0, section: 0));
         
-        let pen = UIButton();
-        view.addSubview(pen);
-        pen.snp.makeConstraints { (make) in
-            make.width.equalTo(60);
-            make.height.equalTo(60);
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20);
-            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-20);
+        if(CNUserService.shared.isLogin) {
+            let pen = UIButton();
+            view.addSubview(pen);
+            pen.snp.makeConstraints { (make) in
+                make.width.equalTo(60);
+                make.height.equalTo(60);
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20);
+                make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-20);
+            }
+            pen.titleLabel?.font = UIFont.init(name: "iconfont", size: 60)
+            pen.setTitle("\u{e63c}", for: .normal);
+            pen.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
+            pen.addTarget(self, action: #selector(onNewTopic), for: .touchUpInside)
         }
-        pen.titleLabel?.font = UIFont.init(name: "iconfont", size: 60)
-        pen.setTitle("\u{e63c}", for: .normal);
-        pen.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
-        pen.addTarget(self, action: #selector(onNewTopic), for: .touchUpInside)
     }
     
     @objc func onNewTopic () {
