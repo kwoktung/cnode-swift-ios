@@ -27,6 +27,7 @@ class CNHomeTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier);
+        self.selectionStyle = .none;
         title.numberOfLines = 2;
         self.addSubview(avator);
         avator.snp.makeConstraints { (make) in

@@ -9,20 +9,21 @@
 import UIKit
 import SnapKit
 
-var tabs:[[String: String]] = [
-    ["title":"全部", "type": "all"],
-    ["title":"精华", "type": "good"],
-    ["title":"分享", "type": "share"],
-    ["title":"问答", "type": "ask"],
-    ["title":"招聘", "type": "job"],
-    ["title": "客服端测试", "type": "dev"]
-];
 
 class CNHomeViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    var tabs:[[String: String]] = [
+        ["title":"全部", "type": "all"],
+        ["title":"精华", "type": "good"],
+        ["title":"分享", "type": "share"],
+        ["title":"问答", "type": "ask"],
+        ["title":"招聘", "type": "job"],
+        ["title": "客服端测试", "type": "dev"]
+    ];
     var currentIndex: Int = -1;
     var pageViewController: UIPageViewController!;
     var controllerArr: [String: CNHomeContentViewControlelr] = [:];
     let pen = UIButton();
+    var cellectionView: UICollectionView!
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabs.count;
@@ -67,7 +68,7 @@ class CNHomeViewController: UIViewController, UICollectionViewDelegate, UICollec
         super.viewDidLoad()
         let layout = UICollectionViewFlowLayout();
         layout.scrollDirection = .horizontal;
-        let cellectionView = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout);
+        cellectionView = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout);
         cellectionView.showsHorizontalScrollIndicator = false;
         cellectionView.dataSource = self;
         cellectionView.delegate = self;
@@ -101,6 +102,7 @@ class CNHomeViewController: UIViewController, UICollectionViewDelegate, UICollec
             make.bottom.equalTo(self.view);
             make.left.equalTo(self.view);
         }
+        
         cellectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredHorizontally)
         self.collectionView(cellectionView, didSelectItemAt: IndexPath(item: 0, section: 0));
         
@@ -118,6 +120,28 @@ class CNHomeViewController: UIViewController, UICollectionViewDelegate, UICollec
         pen.addTarget(self, action: #selector(onNewTopic), for: .touchUpInside)
         pen.isHidden = !CNUserService.shared.isLogin
         NotificationCenter.default.addObserver(self, selector: #selector(onUserLoginStatusChanged) , name: .init(rawValue: "UserLoginStatusChanged"), object: nil)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe(_:)));
+        swipeLeft.direction = .left;
+        view.addGestureRecognizer(swipeLeft);
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe(_:)));
+        swipeRight.direction = .right;
+        view.addGestureRecognizer(swipeRight);
+    }
+    
+    @objc
+    func onSwipe(_ recognizer: UISwipeGestureRecognizer) {
+        switch recognizer.direction {
+        case .right where currentIndex > 0 :
+            cellectionView.selectItem(at: IndexPath(item: currentIndex - 1, section: 0), animated: true, scrollPosition: .centeredHorizontally)
+            self.collectionView(cellectionView, didSelectItemAt: IndexPath(item: currentIndex - 1, section: 0));
+        case .left where currentIndex < tabs.count - 1:
+            cellectionView.selectItem(at: IndexPath(item: currentIndex + 1, section: 0), animated: true, scrollPosition: .centeredHorizontally)
+            self.collectionView(cellectionView, didSelectItemAt: IndexPath(item: currentIndex + 1, section: 0));
+        default:
+            ()
+        }
     }
     
     @objc
