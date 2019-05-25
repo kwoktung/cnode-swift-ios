@@ -47,41 +47,38 @@ class CNParticipatedRepliesViewController: UIViewController, UITableViewDelegate
     func loadData() {
         if let loginname = CNUserService.shared.loginname {
             Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)")
+                .validate()
                 .responseJSON { [unowned self] (response) in
-                    switch response.result {
-                    case .success(_):
-                        let decoder = JSONDecoder();
-                        decoder.dateDecodingStrategy = .iso8601;
-                        decoder.keyDecodingStrategy = .convertFromSnakeCase;
-                        guard let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!), res.success == true else { return }
-                        if(res.data.recentReplies.count > 0) {
-                            self.recent_replies = res.data.recentReplies;
-                            if(self.tableView == nil) {
-                                let tableView = UITableView();
-                                self.tableView = tableView;
-                                tableView.dataSource = self;
-                                tableView.delegate = self;
-                                tableView.rowHeight = 60;
-                                tableView.tableFooterView = UIView();
-                                tableView.register(CNParticipatedRepliesCell.self, forCellReuseIdentifier: "CNParticipatedRepliesCell");
-                                self.view.addSubview(tableView);
-                                tableView.snp.makeConstraints { (make) in
-                                    make.edges.equalTo(self.view);
-                                }
+                    guard case .success(_) = response.result else { return; }
+                    let decoder = JSONDecoder();
+                    decoder.dateDecodingStrategy = .iso8601;
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase;
+                    guard let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!), res.success == true else { return }
+                    if(res.data.recentReplies.count > 0) {
+                        self.recent_replies = res.data.recentReplies;
+                        if(self.tableView == nil) {
+                            let tableView = UITableView();
+                            self.tableView = tableView;
+                            tableView.dataSource = self;
+                            tableView.delegate = self;
+                            tableView.rowHeight = 60;
+                            tableView.tableFooterView = UIView();
+                            tableView.register(CNParticipatedRepliesCell.self, forCellReuseIdentifier: "CNParticipatedRepliesCell");
+                            self.view.addSubview(tableView);
+                            tableView.snp.makeConstraints { (make) in
+                                make.edges.equalTo(self.view);
                             }
-                            self.tableView?.reloadData();
-                        } else {
-                            if(self.label != nil) { return }
-                            let label = UILabel();
-                            self.label = label;
-                            self.view.addSubview(label);
-                            label.text = "你没有创建过主题"
-                            label.snp.makeConstraints({ (make) in
-                                make.center.equalTo(self.view);
-                            })
                         }
-                    case .failure(_):
-                        ()
+                        self.tableView?.reloadData();
+                    } else {
+                        if(self.label != nil) { return }
+                        let label = UILabel();
+                        self.label = label;
+                        self.view.addSubview(label);
+                        label.text = "你没有创建过主题"
+                        label.snp.makeConstraints({ (make) in
+                            make.center.equalTo(self.view);
+                        })
                     }
             }
         }

@@ -60,13 +60,9 @@ class CNHomeContentViewControlelr: UIViewController, UITableViewDelegate, UITabl
                 ])
                 .validate()
                 .responseJSON {(response) in
-                    switch response.result {
-                    case .success(_):
-                        guard let res = try? JSONDecoder().decode(CNHomeTopicResponse.self, from: response.data!) else { return }
-                        DispatchQueue.main.async { callback(res.topicArr);}
-                    case .failure(_):
-                        ()
-                    }
+                    guard case .success(_) = response.result else { return; }
+                    guard let res = try? JSONDecoder().decode(CNHomeTopicResponse.self, from: response.data!) else { return }
+                    DispatchQueue.main.async { callback(res.topicArr);}
             }
         }
     }

@@ -62,38 +62,31 @@ class CNCreatedTopicsViewController: UIViewController, UITableViewDelegate, UITa
         if let loginname = CNUserService.shared.loginname {
             Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)")
                 .responseJSON { [unowned self] (response) in
-                    switch response.result {
-                    case .success(_):
-                        let decoder = JSONDecoder();
-                        decoder.dateDecodingStrategy = .iso8601;
-                        decoder.keyDecodingStrategy = .convertFromSnakeCase;
-                        guard
-                            let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!),
-                            res.success == true else { return }
-                        self.recent_topics = res.data.recentTopics
-                        if(res.data.recentTopics.count > 0) {
-                            let tableView = UITableView();
-                            self.view.addSubview(tableView);
-                            tableView.dataSource = self;
-                            tableView.delegate = self;
-                            tableView.rowHeight = 60;
-                            tableView.tableFooterView = UIView();
-                            tableView.register(CNCreatedTopicsCell.self, forCellReuseIdentifier: "CNCreatedTopicsCell");
-                            tableView.snp.makeConstraints { (make) in
-                                make.edges.equalTo(self.view);
-                            }
-                            tableView.reloadData();
-                        } else  {
-                            let label = UILabel();
-                            self.view.addSubview(label);
-                            label.text = "你没有创建过主题"
-                            label.snp.makeConstraints({ (make) in
-                                make.center.equalTo(self.view);
-                            })
+                    guard case .success(_) = response.result else { return; }
+                    let decoder = JSONDecoder();
+                    decoder.dateDecodingStrategy = .iso8601;
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase;
+                    guard let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!), res.success == true else { return }
+                    self.recent_topics = res.data.recentTopics
+                    if(res.data.recentTopics.count > 0) {
+                        let tableView = UITableView();
+                        self.view.addSubview(tableView);
+                        tableView.dataSource = self;
+                        tableView.delegate = self;
+                        tableView.rowHeight = 60;
+                        tableView.tableFooterView = UIView();
+                        tableView.register(CNCreatedTopicsCell.self, forCellReuseIdentifier: "CNCreatedTopicsCell");
+                        tableView.snp.makeConstraints { (make) in
+                            make.edges.equalTo(self.view);
                         }
-                        
-                    case .failure(_):
-                        ()
+                        tableView.reloadData();
+                    } else  {
+                        let label = UILabel();
+                        self.view.addSubview(label);
+                        label.text = "你没有创建过主题"
+                        label.snp.makeConstraints({ (make) in
+                            make.center.equalTo(self.view);
+                        })
                     }
             }
         }

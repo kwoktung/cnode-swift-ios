@@ -39,7 +39,7 @@ class CNSettingViewController: UIViewController {
         let confirm = UIAlertAction.init(title: "确定", style: .default) { (UIAlertAction) in
             Alamofire.request("https://cnodejs.org/signout").responseData(completionHandler: { (_) in
                 CNUserService.shared.logout();
-                NotificationCenter.default.post(name: Notification.Name.init("UserLoginStatusChanged"), object: nil);
+                NotificationCenter.default.post(name: Notification.Name.init("UserLoginStatusChanged"), object: nil, userInfo: ["isLogin": false]);
                 self.navigationController?.popToRootViewController(animated: true);
             })
         }

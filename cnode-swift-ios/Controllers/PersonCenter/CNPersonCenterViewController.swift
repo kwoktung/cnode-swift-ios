@@ -136,26 +136,22 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
     func loadData() {
         if let loginname = CNUserService.shared.loginname, CNUserService.shared.isLogin == true {
             Alamofire.request("https://cnodejs.org/api/v1/user/\(loginname)")
+                .validate()
                 .responseJSON { [unowned self] (response) in
-                    switch response.result{
-                    case .success(_):
-                        let decoder = JSONDecoder();
-                        decoder.dateDecodingStrategy = .iso8601;
-                        decoder.keyDecodingStrategy = .convertFromSnakeCase;
-                        guard let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!), res.success == true else { return }
-                        let model = res.data;
-                        self.username.text = model.loginname;
-                        self.avator.af_setImage(withURL: URL.init(string: model.avatarUrl)!)
-                        if let createAtTime = model.createAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese)
-                        {
-                            self.datetime.text = "\(createAtTime)加入社区"
-                        }
-                        self.recent_topics = model.recentTopics
-                        self.recent_replies = model.recentReplies
-                       
-                    case .failure(_):
-                        ()
+                    guard case .success(_) = response.result else { return; }
+                    let decoder = JSONDecoder();
+                    decoder.dateDecodingStrategy = .iso8601;
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase;
+                    guard let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!), res.success == true else { return }
+                    let model = res.data;
+                    self.username.text = model.loginname;
+                    self.avator.af_setImage(withURL: URL.init(string: model.avatarUrl)!)
+                    if let createAtTime = model.createAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese)
+                    {
+                        self.datetime.text = "\(createAtTime)加入社区"
                     }
+                    self.recent_topics = model.recentTopics
+                    self.recent_replies = model.recentReplies
             }
         } else {
             self.username.text = "匿名";

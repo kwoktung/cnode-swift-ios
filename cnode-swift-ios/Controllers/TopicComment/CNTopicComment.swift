@@ -70,6 +70,7 @@ class CNTopicCommentViewController: UIViewController {
                         ]
                         ).validate()
                         .responseData(completionHandler: { (response) in
+                            guard case .success(_) = response.result else { return; }
                             NotificationCenter.default.post(name: Notification.Name.init("TopicNeedUpdateReplies"), object: nil)
                             self.navigationController?.popViewController(animated: true);
                         })

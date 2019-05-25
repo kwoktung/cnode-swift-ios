@@ -22,6 +22,7 @@ class CNHomeViewController: UIViewController, UICollectionViewDelegate, UICollec
     var currentIndex: Int = -1;
     var pageViewController: UIPageViewController!;
     var controllerArr: [String: CNHomeContentViewControlelr] = [:];
+    let pen = UIButton();
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabs.count;
@@ -103,24 +104,32 @@ class CNHomeViewController: UIViewController, UICollectionViewDelegate, UICollec
         cellectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .centeredHorizontally)
         self.collectionView(cellectionView, didSelectItemAt: IndexPath(item: 0, section: 0));
         
-        if(CNUserService.shared.isLogin) {
-            let pen = UIButton();
-            view.addSubview(pen);
-            pen.snp.makeConstraints { (make) in
-                make.width.equalTo(60);
-                make.height.equalTo(60);
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20);
-                make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-20);
-            }
-            pen.titleLabel?.font = UIFont.init(name: "iconfont", size: 60)
-            pen.setTitle("\u{e63c}", for: .normal);
-            pen.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
-            pen.addTarget(self, action: #selector(onNewTopic), for: .touchUpInside)
+        
+        view.addSubview(pen);
+        pen.snp.makeConstraints { (make) in
+            make.width.equalTo(60);
+            make.height.equalTo(60);
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20);
+            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-20);
         }
+        pen.titleLabel?.font = UIFont.init(name: "iconfont", size: 60)
+        pen.setTitle("\u{e63c}", for: .normal);
+        pen.setTitleColor(UIColor.init(red: 0/255, green: 127/255, blue: 255/255, alpha: 1), for: .normal);
+        pen.addTarget(self, action: #selector(onNewTopic), for: .touchUpInside)
+        pen.isHidden = !CNUserService.shared.isLogin
+        NotificationCenter.default.addObserver(self, selector: #selector(onUserLoginStatusChanged) , name: .init(rawValue: "UserLoginStatusChanged"), object: nil)
     }
     
-    @objc func onNewTopic () {
+    @objc
+    func onNewTopic () {
         let controller = CNNewTopicViewController();
         self.navigationController?.pushViewController(controller, animated: true);
+    }
+    
+    @objc
+    func onUserLoginStatusChanged(_ noti: Notification) {
+        if let userInfo = noti.userInfo as! [String: Bool]?, let isLogin = userInfo["isLogin"] {
+            pen.isHidden = !isLogin
+        }
     }
 }

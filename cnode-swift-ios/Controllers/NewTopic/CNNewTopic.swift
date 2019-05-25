@@ -109,8 +109,10 @@ class CNNewTopicViewController: UIViewController {
                             "t_content": content,
                             "_csrf": csrf
                         ]
-                        ).validate()
-                        .responseData(queue: DispatchQueue.main, completionHandler: { (data:DataResponse) in
+                        )
+                        .validate()
+                        .responseData(queue: DispatchQueue.main, completionHandler: { [unowned self] (data:DataResponse) in
+                            guard case .success(_) = data.result else { return; }
                             SVProgressHUD.showSuccess(withStatus: "创建成功")
                             if let topicId = data.response?.url?.lastPathComponent
                             {

@@ -131,11 +131,16 @@ class CNLoginCSRFViewController: UIViewController {
                                                 let element: Element = try! doc.select("#accessToken").first(),
                                                 let accesstoken = try? element.text() {
                                                 CNUserService.shared.login(accesstoken, with: {
-                                                    NotificationCenter.default.post(name: Notification.Name.init("UserLoginStatusChanged"), object: nil);
+                                                    NotificationCenter.default.post(name: Notification.Name.init("UserLoginStatusChanged"), object: nil, userInfo: ["isLogin": true]);
                                                     self.navigationController?.popViewController(animated: true);
                                                 })
                                             }
                                         })
+
+                                    case .failure(let error as AFError):
+                                        if let code = error.responseCode, code == 403 {
+                                            SVProgressHUD.showError(withStatus: "账号密码错误");
+                                        }
                                     case .failure(_):
                                         SVProgressHUD.showError(withStatus: "登陆失败");
                                     };

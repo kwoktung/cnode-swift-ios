@@ -72,16 +72,12 @@ class CNCollectionListViewController: UIViewController, UITableViewDelegate, UIT
                 "https://cnodejs.org/api/v1/topic_collect/\(CNUserService.shared.loginname!)")
                 .validate()
                 .responseJSON { (response) in
-                    switch response.result {
-                    case .success(_):
-                        let decoder = JSONDecoder();
-                        decoder.keyDecodingStrategy = .convertFromSnakeCase;
-                        guard let res = try? decoder.decode(CNCollectionListResponse.self, from: response.data!) else { return }
-                        DispatchQueue.main.async {
-                            handler?(res.data);
-                        }
-                    case .failure(_):
-                        ()
+                    guard case .success(_) = response.result else { return; }
+                    let decoder = JSONDecoder();
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase;
+                    guard let res = try? decoder.decode(CNCollectionListResponse.self, from: response.data!) else { return }
+                    DispatchQueue.main.async {
+                        handler?(res.data);
                     }
             }
         }
