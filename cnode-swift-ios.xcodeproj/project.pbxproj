@@ -23,7 +23,6 @@
 		464FB3AB228166B2007C438A /* CNNewTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3AA228166B2007C438A /* CNNewTopic.swift */; };
 		464FB3AD22817DF3007C438A /* CNCSRFTokenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3AC22817DF3007C438A /* CNCSRFTokenService.swift */; };
 		464FB3B022819BC3007C438A /* CNLoginCSRF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3AF22819BC3007C438A /* CNLoginCSRF.swift */; };
-		464FB3B22282666B007C438A /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 464FB3B122826665007C438A /* iconfont.ttf */; };
 		464FB3B522826AC2007C438A /* CNTopicComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FB3B422826AC2007C438A /* CNTopicComment.swift */; };
 		469E38922275733E00840E3A /* CNHomeCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E38912275733E00840E3A /* CNHomeCollectionCell.swift */; };
 		469E389622759B4600840E3A /* CNHomeContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E389522759B4600840E3A /* CNHomeContentViewController.swift */; };
@@ -37,6 +36,7 @@
 		9F0EA173228A5F2100C59F7E /* CNTopicModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0EA172228A5F2100C59F7E /* CNTopicModel.swift */; };
 		9F0EA175228A664B00C59F7E /* CNCollectionListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0EA174228A664B00C59F7E /* CNCollectionListModel.swift */; };
 		9F38301E22869099008FD746 /* CNHomeTopicModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F38301D22869099008FD746 /* CNHomeTopicModel.swift */; };
+		9F4EB728229FC55C0028943E /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F4EB727229FC5550028943E /* iconfont.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,7 +59,6 @@
 		464FB3AA228166B2007C438A /* CNNewTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNewTopic.swift; sourceTree = "<group>"; };
 		464FB3AC22817DF3007C438A /* CNCSRFTokenService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCSRFTokenService.swift; sourceTree = "<group>"; };
 		464FB3AF22819BC3007C438A /* CNLoginCSRF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNLoginCSRF.swift; sourceTree = "<group>"; };
-		464FB3B122826665007C438A /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		464FB3B422826AC2007C438A /* CNTopicComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTopicComment.swift; sourceTree = "<group>"; };
 		469E38912275733E00840E3A /* CNHomeCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeCollectionCell.swift; sourceTree = "<group>"; };
 		469E389522759B4600840E3A /* CNHomeContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeContentViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +72,7 @@
 		9F0EA172228A5F2100C59F7E /* CNTopicModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTopicModel.swift; sourceTree = "<group>"; };
 		9F0EA174228A664B00C59F7E /* CNCollectionListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollectionListModel.swift; sourceTree = "<group>"; };
 		9F38301D22869099008FD746 /* CNHomeTopicModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeTopicModel.swift; sourceTree = "<group>"; };
+		9F4EB727229FC5550028943E /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = iconfont.ttf; path = ../../../../Downloads/font_1176895_9odqcj2406r/iconfont.ttf; sourceTree = "<group>"; };
 		C7D6BAE2C371B8085C1ABB77 /* Pods_cnode_swift_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cnode_swift_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2D9ADB5DD4336B42DB767F3 /* Pods-cnode-swift-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cnode-swift-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-cnode-swift-ios/Pods-cnode-swift-ios.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -187,7 +187,7 @@
 		464FB3A22280330C007C438A /* Asset */ = {
 			isa = PBXGroup;
 			children = (
-				464FB3B122826665007C438A /* iconfont.ttf */,
+				9F4EB727229FC5550028943E /* iconfont.ttf */,
 			);
 			path = Asset;
 			sourceTree = "<group>";
@@ -334,7 +334,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				464FB3B22282666B007C438A /* iconfont.ttf in Resources */,
+				9F4EB728229FC55C0028943E /* iconfont.ttf in Resources */,
 				462E2A4622754206002A1FE7 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

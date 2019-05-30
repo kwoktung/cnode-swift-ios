@@ -22,6 +22,7 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
     
     let username = UILabel();
     let datetime = UILabel();
+    let profileBtn = UIButton();
     let avator = UIImageView();
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -32,6 +33,8 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
         let cell = tableView.dequeueReusableCell(withIdentifier: "ContentViewCell", for: indexPath);
         let item = dataArr[indexPath.item];
         cell.textLabel?.text = item["text"] as? String
+        cell.textLabel?.font = .systemFont(ofSize: 14);
+        cell.textLabel?.textColor = UIColor.init(red: 38/255, green: 153/255, blue: 251/255, alpha: 1);
         cell.accessoryType = .disclosureIndicator;
         return cell;
     }
@@ -63,10 +66,21 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
+    @objc
+    func onDo() {
+        if(!CNUserService.shared.isLogin) {
+            let controller = CNLoginCSRFViewController();
+            controller.modalPresentationStyle = .overFullScreen;
+            self.present(controller, animated: true, completion: nil)
+        }
+    }
+    
     func onWithoutLogin() {
         let controller = UIAlertController.init(title: nil, message: "请先登录", preferredStyle: .alert);
         let confirm = UIAlertAction.init(title: "确定", style: .default) { (action) in
-            self.navigationController?.pushViewController(CNLoginCSRFViewController(), animated: true);
+            let controller = CNLoginCSRFViewController();
+            controller.modalPresentationStyle = .overFullScreen;
+            self.present(controller, animated: true, completion: nil)
         }
         let cancel = UIAlertAction.init(title: "取消", style: .cancel, handler: nil);
         controller.addAction(confirm);
@@ -76,55 +90,77 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let headerView = UIView();
-        headerView.backgroundColor = UIColor.gray;
+        let headerView = UIView()
+        headerView.backgroundColor = UIColor.init(red: 188/255, green: 224/255, blue: 253/255, alpha: 1);
         self.view.addSubview(headerView);
         headerView.snp.makeConstraints { (make) in
             make.width.equalToSuperview();
-            make.height.equalTo(self.view).multipliedBy(0.4);
+            make.height.equalTo(self.view.snp.width).multipliedBy(0.53);
             make.top.equalTo(self.view);
             make.left.equalTo(self.view);
         }
         
         avator.layer.cornerRadius = 50;
         avator.layer.masksToBounds = true;
-        
         headerView.addSubview(avator);
         avator.snp.makeConstraints({ (make) in
             make.width.height.equalTo(100);
-            make.centerX.equalTo(headerView);
-            make.centerY.equalTo(headerView).offset(-25);
+            make.center.equalTo(headerView);
         })
         
-        headerView.addSubview(username);
-        username.font = UIFont.systemFont(ofSize: 20);
-        username.textColor = UIColor.white;
+        
+        let profileView = UIView();
+        profileView.backgroundColor = UIColor.init(red: 241/255, green: 249/255, blue: 1, alpha: 1);
+        view.addSubview(profileView);
+        profileView.snp.makeConstraints { (make) in
+            make.height.equalTo(110);
+            make.width.equalTo(view);
+            make.top.equalTo(headerView.snp.bottom);
+            make.left.equalTo(view);
+        }
+        
+        profileView.addSubview(username);
+        username.font = UIFont.boldSystemFont(ofSize: 20);
+        username.textColor = UIColor.init(red: 38/255, green: 153/255, blue: 251/255, alpha: 1);
         username.snp.makeConstraints({ (make) in
-            make.top.equalTo(avator.snp.bottom).offset(10);
-            make.centerX.equalTo(avator.snp.centerX);
+            make.top.equalTo(profileView.snp.top).offset(32);
+            make.left.equalTo(profileView).offset(32);
         });
         
-        
-        datetime.font = UIFont.systemFont(ofSize: 16);
-        datetime.textColor = UIColor.white;
-        
-        headerView.addSubview(datetime);
+        profileView.addSubview(datetime);
+        datetime.font = UIFont.systemFont(ofSize: 14);
+        datetime.textColor = UIColor.init(red: 38/255, green: 153/255, blue: 251/255, alpha: 1);
         datetime.snp.makeConstraints({ (make) in
-            make.top.equalTo(username.snp.bottom).offset(10);
-            make.centerX.equalTo(headerView);
+            make.top.equalTo(username.snp.bottom).offset(8);
+            make.left.equalTo(username);
         })
+        
+        
+        profileView.addSubview(profileBtn);
+        profileBtn.setTitle("编辑", for: .normal);
+        profileBtn.addTarget(self, action: #selector(onDo), for: .touchUpInside);
+        profileBtn.titleLabel?.font = .systemFont(ofSize: 14);
+
+        profileBtn.layer.cornerRadius = 4;
+        profileBtn.backgroundColor = UIColor.init(red: 38/255, green: 153/255, blue: 251/255, alpha: 1);
+        profileBtn.snp.makeConstraints { (make) in
+            make.width.equalTo(96);
+            make.height.equalTo(40);
+            make.centerY.equalTo(profileView);
+            make.right.equalTo(view).offset(-32)
+        }
 
         let contentView = UITableView();
         contentView.dataSource = self;
         contentView.delegate = self;
         contentView.rowHeight = 60;
         contentView.isScrollEnabled = false;
-        contentView.register(UITableViewCell.self, forCellReuseIdentifier: "ContentViewCell")
+        contentView.register(UITableViewCell.self, forCellReuseIdentifier: "ContentViewCell");
         self.view.addSubview(contentView);
         
         contentView.snp.makeConstraints { (make) in
             make.width.equalTo(self.view);
-            make.top.equalTo(headerView.snp.bottom);
+            make.top.equalTo(profileView.snp.bottom);
             make.left.equalTo(self.view)
             make.height.equalTo(60*dataArr.count);
         }
@@ -157,6 +193,7 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
             self.username.text = "匿名";
             self.avator.image = UIImage.init(named: "logo");
             self.datetime.text = "登录后开启更多功能"
+            self.profileBtn.setTitle("去登陆", for: .normal)
         }
     }
     

@@ -18,12 +18,13 @@ class CNTopicContentWebViewCell: UITableViewCell, WKNavigationDelegate {
     var refresh: refreshCallback?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier);
+        print(self.frame.size.width)
+        webView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.frame.size.height);
         self.contentView.addSubview(webView);
         webView.navigationDelegate = self;
         webView.scrollView.isScrollEnabled = false;
         webView.scrollView.bounces = false;
         webView.autoresizingMask = .flexibleHeight;
-        webView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height);
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

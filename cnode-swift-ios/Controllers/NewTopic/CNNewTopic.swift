@@ -18,17 +18,30 @@ class CNNewTopicViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
+        self.navigationController?.setNavigationBarHidden(true, animated: true);
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidAppear(animated);
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated);
+        self.navigationController?.setNavigationBarHidden(false, animated: true);
     }
 
     override func viewDidLoad() {
         super.viewDidLoad();
         view.backgroundColor = UIColor.white;
-
+        
+        let backBtn = UIButton();
+        view.addSubview(backBtn);
+        backBtn.titleLabel?.font = UIFont.init(name: "iconfont", size: 30)
+        backBtn.setTitle("\u{e739}", for: .normal);
+        backBtn.setTitleColor(UIColor.init(red: 38/255, green: 153/255, blue: 251/255, alpha: 1), for: .normal);
+        backBtn.snp.makeConstraints { (make) in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20);
+            make.left.equalTo(view).offset(15);
+        }
+        backBtn.addTarget(self, action: #selector(onBack), for: .touchUpInside);
+        
+        
         view.addSubview(titleField);
         titleField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 50))
         titleField.leftViewMode = .always
@@ -38,12 +51,11 @@ class CNNewTopicViewController: UIViewController {
         titleField.textColor = UIColor.init(red: 188/255, green: 224/255, blue: 253/255, alpha: 1);
         titleField.attributedPlaceholder = NSAttributedString.init(
             string: "标题(10个字以上)",
-            attributes: [
-                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),
-            ])
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(red: 38/255, green: 153/255, blue: 251/255, alpha: 1)]
+        )
         titleField.font = UIFont.systemFont(ofSize: 14);
         titleField.snp.makeConstraints { (make) in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(60);
+            make.top.equalTo(backBtn.snp.bottom).offset(24);
             make.left.equalTo(view).offset(25);
             make.right.equalTo(view).offset(-25);
             make.height.equalTo(50);
@@ -55,15 +67,15 @@ class CNNewTopicViewController: UIViewController {
         submit.backgroundColor = UIColor.init(red: 0, green: 127/255, blue: 255/255, alpha: 1)
         view.addSubview(submit);
         submit.snp.makeConstraints { (make) in
-            make.left.equalTo(view).offset(15);
-            make.right.equalTo(view).offset(-15);
+            make.left.equalTo(view).offset(25);
+            make.right.equalTo(view).offset(-25);
             make.height.equalTo(50);
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
         }
         submit.addTarget(self, action: #selector(onSubmit), for: .touchUpInside);
         
         contentView.textContainerInset = UIEdgeInsets.init(top: 15, left: 10, bottom: 15, right: 10);
-        contentView.layer.borderWidth = 0.5;
+        contentView.layer.borderWidth = 1;
         contentView.layer.borderColor = UIColor.init(red: 188/255, green: 224/255, blue: 253/255, alpha: 1).cgColor;
         contentView.font = UIFont.systemFont(ofSize: 16);
         view.addSubview(contentView);
@@ -77,8 +89,8 @@ class CNNewTopicViewController: UIViewController {
     }
     
     @objc
-    func onTap() {
-        print("onTap");
+    func onBack() {
+        self.navigationController?.popViewController(animated: true);
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -30,7 +30,9 @@ struct CNTopicModel:Decodable {
     let visitCount: Int32
     let author: CNTopicAuthor
     let replies: [CNTopicReply]
+    let tab: String
     var isCollect: Bool
+    
 }
 
 struct CNTopicModelResponse:Decodable {
