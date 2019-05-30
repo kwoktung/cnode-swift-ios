@@ -181,6 +181,7 @@ class CNPersonCenterViewController: UIViewController, UITableViewDataSource, UIT
                     guard let res = try? decoder.decode(CNPersonCenterResponse.self, from: response.data!), res.success == true else { return }
                     let model = res.data;
                     self.username.text = model.loginname;
+                    self.profileBtn.setTitle("编辑", for: .normal)
                     self.avator.af_setImage(withURL: URL.init(string: model.avatarUrl)!)
                     if let createAtTime = model.createAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese)
                     {
