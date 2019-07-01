@@ -36,7 +36,7 @@
 		9F0EA173228A5F2100C59F7E /* CNTopicModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0EA172228A5F2100C59F7E /* CNTopicModel.swift */; };
 		9F0EA175228A664B00C59F7E /* CNCollectionListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0EA174228A664B00C59F7E /* CNCollectionListModel.swift */; };
 		9F38301E22869099008FD746 /* CNHomeTopicModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F38301D22869099008FD746 /* CNHomeTopicModel.swift */; };
-		9F4EB728229FC55C0028943E /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F4EB727229FC5550028943E /* iconfont.ttf */; };
+		9FF51AF622C998D300D29432 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9FF51AF522C998C000D29432 /* iconfont.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,7 +72,7 @@
 		9F0EA172228A5F2100C59F7E /* CNTopicModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTopicModel.swift; sourceTree = "<group>"; };
 		9F0EA174228A664B00C59F7E /* CNCollectionListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollectionListModel.swift; sourceTree = "<group>"; };
 		9F38301D22869099008FD746 /* CNHomeTopicModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNHomeTopicModel.swift; sourceTree = "<group>"; };
-		9F4EB727229FC5550028943E /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = iconfont.ttf; path = ../../../../Downloads/font_1176895_9odqcj2406r/iconfont.ttf; sourceTree = "<group>"; };
+		9FF51AF522C998C000D29432 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		C7D6BAE2C371B8085C1ABB77 /* Pods_cnode_swift_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cnode_swift_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2D9ADB5DD4336B42DB767F3 /* Pods-cnode-swift-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cnode-swift-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-cnode-swift-ios/Pods-cnode-swift-ios.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -187,7 +187,7 @@
 		464FB3A22280330C007C438A /* Asset */ = {
 			isa = PBXGroup;
 			children = (
-				9F4EB727229FC5550028943E /* iconfont.ttf */,
+				9FF51AF522C998C000D29432 /* iconfont.ttf */,
 			);
 			path = Asset;
 			sourceTree = "<group>";
@@ -334,7 +334,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F4EB728229FC55C0028943E /* iconfont.ttf in Resources */,
+				9FF51AF622C998D300D29432 /* iconfont.ttf in Resources */,
 				462E2A4622754206002A1FE7 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -379,6 +379,7 @@
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftDate/SwiftDate.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
+				"${BUILT_PRODUCTS_DIR}/YYText/YYText.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
@@ -390,6 +391,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftDate.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYText.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
