@@ -6,7 +6,6 @@ PODS:
   - SVProgressHUD (2.2.5)
   - SwiftDate (6.0.3)
   - SwiftSoup (2.0.0)
-  - YYText (1.0.7)
 
 DEPENDENCIES:
   - Alamofire
@@ -15,7 +14,6 @@ DEPENDENCIES:
   - SVProgressHUD
   - SwiftDate
   - SwiftSoup
-  - YYText
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -25,7 +23,6 @@ SPEC REPOS:
     - SVProgressHUD
     - SwiftDate
     - SwiftSoup
-    - YYText
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
@@ -34,8 +31,7 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftDate: 8d4f14bf1ef68e95094511504856547bf9e3e1a6
   SwiftSoup: 4fe21f65cdbfa3a40559047016b7962b88d29279
-  YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
 
-PODFILE CHECKSUM: 51b871dc6227f3d030d1ca21bfe3f4c99226ce11
+PODFILE CHECKSUM: 23ac1a2dd50c8e4ce5439b6569d5d2e6313759b8
 
 COCOAPODS: 1.6.1

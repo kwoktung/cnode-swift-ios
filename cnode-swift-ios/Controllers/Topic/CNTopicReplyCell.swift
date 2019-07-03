@@ -36,6 +36,7 @@ class CNTopicReplyCell: UITableViewCell {
         }
         self.addSubview(replyContent);
         replyContent.numberOfLines = 0;
+//        replyContent.lineBreakMode = .byWordWrapping;
         replyContent.snp.makeConstraints { (make) in
             make.top.equalTo(authorName.snp.bottom);
             make.left.equalTo(avator.snp.right).offset(10);

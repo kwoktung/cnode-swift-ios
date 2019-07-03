@@ -10,6 +10,5 @@ target 'cnode-swift-ios' do
   pod 'SwiftDate'
   pod 'SwiftSoup'
   pod 'SVProgressHUD'
-  pod 'YYText'
   # Pods for cnode-swift-ios
 end

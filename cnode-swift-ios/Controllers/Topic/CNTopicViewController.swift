@@ -218,7 +218,23 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
             let replyItem = replyArr[indexPath.item]
             cell?.authorName.text = replyItem.author.loginname;
             cell?.avator.af_setImage(withURL: URL.init(string: replyItem.author.avatarUrl)!);
-            cell?.replyContent.text = replyItem.content;
+            let content = "<html><body>\(replyItem.content)</body></html>"
+            NSLog("%@", replyItem.content)
+            let data = Data(content.utf8)
+            if let attributedString = try? NSMutableAttributedString(
+                data: data,
+                options: [
+                    .documentType: NSAttributedString.DocumentType.html,
+                    .characterEncoding: String.Encoding.utf8.rawValue
+                ],
+                documentAttributes: nil) {
+                attributedString.setAttributes(
+                    [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)],
+                    range: NSRange.init(location: 0, length: attributedString.length));
+                cell?.replyContent.attributedText = attributedString;
+            } else {
+                  cell?.replyContent.text = replyItem.content;
+            }
             if let _replyAt = replyItem.createAt.toDate()?.toRelative(since: nil, style: RelativeFormatter.defaultStyle(), locale: Locales.chinese) {
                 cell?.replyAt.text = "\(_replyAt)";
             }
@@ -380,7 +396,7 @@ class CNTopicViewController: UIViewController, UITableViewDelegate, UITableViewD
         group.enter()
         group.enter();
         DispatchQueue.global().async(group: group, qos: .default, flags: .inheritQoS) {
-            self.loadData("false", with: { (topic) in
+            self.loadData("true", with: { (topic) in
                 self.replyArr = topic.replies
                 group.leave();
             })
